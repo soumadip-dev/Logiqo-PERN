@@ -37,6 +37,7 @@ model User {
   problems        Problem[]         // Problems authored by this user
   Submission      Submission[]      // Submissions made by this user
   problemSolved   ProblemSolved[]   // Problems that the user has solved
+  playlists       Playlist[]        // Playlists created by this user
 }
 
 // Problem model definition
@@ -62,6 +63,7 @@ model Problem {
 
   submission Submission[]       // Submissions made for this problem
   solvedBy   ProblemSolved[]    // Users who have solved this problem
+  problemPlaylists ProblemInPlaylist[] // Playlists containing this problem
 }
 
 // Submission model definition
@@ -121,4 +123,34 @@ model ProblemSolved {
   problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
   @@unique([userId,problemId])                 // Ensure a user cannot solve the same problem multiple times
+}
+
+model Playlist {
+  id            String   @id @default(uuid())        // Unique identifier
+  name          String                               // Name of the playlist
+  description   String?                              // Description of the playlist
+  userId        String                               // User ID associated with the playlist
+  createdAt     DateTime @default(now())             // Submission timestamp
+  updatedAt     DateTime @updatedAt                  // Last update timestamp
+  problems      ProblemInPlaylist[]                  // Problems in the playlist
+
+  // Relationships to User
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([name, userId])                 // Ensure a user cannot solve the same problem multiple times
+}
+
+
+model ProblemInPlaylist{
+  id              String   @id @default(uuid())        // Unique identifier
+  playlistId      String                               // ID of the playlist
+  problemId       String                               // ID of the problem
+  createdAt     DateTime @default(now())             // Submission timestamp
+  updatedAt     DateTime @updatedAt                  // Last update timestamp
+
+  playlist     Playlist   @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  problem      Problem    @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([playlistId,problemId])                 // Ensure a user cannot solve the same problem multiple times
+
 }
