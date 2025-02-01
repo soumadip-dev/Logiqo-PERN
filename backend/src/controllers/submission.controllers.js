@@ -64,6 +64,20 @@ const getSubmissionsForProblem = async (req, res) => {
 // CONTROLLER FOR GET ALL SUBMISSIONS COUNT FOR PROBLEM
 const getAllTheSubmissionsForProblem = async (req, res) => {
   try {
+    // Extract problemID from parameters
+    const problemId = req.params.problemId;
+    const submission = await db.submission.count({
+      where: {
+        problemId: problemId,
+      },
+    });
+
+    // Return success response with submissions
+    res.status(200).json({
+      success: true,
+      message: 'Submissions fetched successfully',
+      submission,
+    });
   } catch (error) {
     console.error('Server error', error.message);
     res.status(500).json({

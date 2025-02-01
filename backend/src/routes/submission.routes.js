@@ -21,7 +21,7 @@ router.get(
   getSubmissionsForProblem
 );
 
-// GET ALL SUBMISSIONS COUNT FOR PROBLEM ROUTE
+// git ROUTE
 router.get(
   '/get-submissions-count/:problemId',
   authMiddleware,
