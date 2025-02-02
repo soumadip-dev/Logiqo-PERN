@@ -6,7 +6,7 @@ import {
   getSubmissionsForProblem,
 } from '../controllers/submission.controllers.js';
 
-import { authMiddleware } from '../middlewares/auth.middlewares';
+import { authMiddleware } from '../middlewares/auth.middlewares.js';
 
 // CREATING ROUTER INSTANCE
 const router = Router();
