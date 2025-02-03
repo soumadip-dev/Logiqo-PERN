@@ -23,7 +23,7 @@ router.get(
 
 // GET ALL SUBMISSIONS COUNT FOR PROBLEM ROUTE
 router.get(
-  '/get-submissions-count:problemId',
+  '/get-submissions-count/:problemId',
   authMiddleware,
   getAllTheSubmissionsForProblem
 );
