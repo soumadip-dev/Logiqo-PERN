@@ -12,7 +12,7 @@ export const authMiddleware = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        error: 'Unauthorized - No token found',
+        error: 'Unauthorized - User not found',
       });
     }
 
