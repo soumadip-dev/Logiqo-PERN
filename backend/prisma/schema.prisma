@@ -25,7 +25,7 @@ enum Difficulty {
 
 // User model definition
 model User {
-  id        String   @id @default(uuid())       // Unique identifier
+  id        String   @id @default(uuid())     // Unique identifier
   name      String?                           // Optional user's full name
   email     String   @unique                  // Unique email address
   image     String?                           // Optional profile image URL
@@ -34,13 +34,14 @@ model User {
   createdAt DateTime @default(now())          // Account creation timestamp
   updatedAt DateTime @updatedAt               // Last update timestamp
 
-  problems   Problem[]    // Problems authored by this user
-  Submission Submission[] // Submissions made by this user
+  problems        Problem[]         // Problems authored by this user
+  Submission      Submission[]      // Submissions made by this user
+  problemSolved   ProblemSolved[]   // Problems that the user has solved
 }
 
 // Problem model definition
 model Problem {
-  id                 String     @id @default(uuid()) // Unique identifier
+  id                 String     @id @default(uuid())  // Unique identifier
   title              String                           // Problem title
   description        String                           // Problem description
   difficulty         Difficulty                       // Difficulty level
@@ -59,12 +60,13 @@ model Problem {
   // Relationship with User (problem creator)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  submission Submission[] // Submissions made for this problem
+  submission Submission[]       // Submissions made for this problem
+  solvedBy   ProblemSolved[]    // Users who have solved this problem
 }
 
 // Submission model definition
 model Submission {
-  id            String   @id @default(uuid())     // Unique identifier
+  id            String   @id @default(uuid())      // Unique identifier
   userId        String                             // Submitting user's ID
   problemId     String                             // Problem being attempted
   sourceCode    Json                               // Submitted source code
@@ -88,7 +90,7 @@ model Submission {
 
 // TestCaseResult model - details result for each test case of a submission
 model TestCaseResult {
-  id            String   @id @default(uuid())       // Unique identifier
+  id            String   @id @default(uuid())      // Unique identifier
   submissionId  String                             // Related submission ID
   testCase      Int                                // Test case number
   passed        Boolean                            // Whether test case passed
@@ -102,7 +104,21 @@ model TestCaseResult {
   createdAt     DateTime @default(now())           // Result timestamp
 
   // Relationship to Submission
-  Submission Submission @relation(fields: [submissionId], references: [id])
+  Submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
 
   @@index([submissionId]) // Index for faster querying by submission ID
+}
+
+// Model for tracking which users have solved which problems
+model ProblemSolved {
+  id        String   @id @default(uuid())       // Unique identifier
+  userId    String                              // ID of the user who solved the problem
+  problemId String                              // ID of the problem that was solved
+  createdAt DateTime @default(now())            // Timestamp when the problem was marked as solved
+
+  // Relationships to User and Problem
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId,problemId])                 // Ensure a user cannot solve the same problem multiple times
 }
