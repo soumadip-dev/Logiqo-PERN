@@ -25,80 +25,84 @@ enum Difficulty {
 
 // User model definition
 model User {
-  id        String   @id @default(uuid())
-  name      String?
-  email     String   @unique
-  image     String?
-  role      UserRole
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String   @id @default(uuid())       // Unique identifier
+  name      String?                           // Optional user's full name
+  email     String   @unique                  // Unique email address
+  image     String?                           // Optional profile image URL
+  role      UserRole                          // Role (ADMIN or USER)
+  password  String                            // Hashed password
+  createdAt DateTime @default(now())          // Account creation timestamp
+  updatedAt DateTime @updatedAt               // Last update timestamp
 
-  problems   Problem[]
-  Submission Submission[]
+  problems   Problem[]    // Problems authored by this user
+  Submission Submission[] // Submissions made by this user
 }
 
 // Problem model definition
 model Problem {
-  id                 String     @id @default(uuid())
-  title              String
-  description        String
-  difficulty         Difficulty
-  tags               String[]
-  userId             String
-  examples           Json
-  constraints        String
-  hints              String?
-  editorial          String?
-  testcases          Json
-  codeSnippets       Json
-  referenceSolutions Json
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
+  id                 String     @id @default(uuid()) // Unique identifier
+  title              String                           // Problem title
+  description        String                           // Problem description
+  difficulty         Difficulty                       // Difficulty level
+  tags               String[]                         // Tags for filtering
+  userId             String                           // Reference to the author (User)
+  examples           Json                             // Example inputs/outputs
+  constraints        String                           // Problem constraints
+  hints              String?                          // Optional hints
+  editorial          String?                          // Optional editorial explanation
+  testcases          Json                             // Input/output pairs for testing
+  codeSnippets       Json                             // Starter code snippets
+  referenceSolutions Json                             // Correct solutions in various languages
+  createdAt          DateTime   @default(now())       // Creation timestamp
+  updatedAt          DateTime   @updatedAt            // Last update timestamp
 
-  // Relationship
+  // Relationship with User (problem creator)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  submission Submission[]
+  submission Submission[] // Submissions made for this problem
 }
 
+// Submission model definition
 model Submission {
-  id            String   @id @default(uuid())
-  userId        String
-  problemId     String
-  sourceCode    Json
-  language      String
-  stdin         String?
-  stdout        String?
-  stderr        String?
-  compileOutput String?
-  status        String // Accepted, Wrong Answer
-  memory        String?
-  time          String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  // Relationship
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  problem       Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  id            String   @id @default(uuid())     // Unique identifier
+  userId        String                             // Submitting user's ID
+  problemId     String                             // Problem being attempted
+  sourceCode    Json                               // Submitted source code
+  language      String                             // Language of submission
+  stdin         String?                            // Optional input for execution
+  stdout        String?                            // Output of the code
+  stderr        String?                            // Runtime error (if any)
+  compileOutput String?                            // Compilation error (if any)
+  status        String                             // Submission status (e.g., Accepted)
+  memory        String?                            // Memory usage
+  time          String?                            // Execution time
+  createdAt     DateTime @default(now())           // Submission timestamp
+  updatedAt     DateTime @updatedAt                // Last update timestamp
 
-  testCases TestCaseResult[]
+  // Relationships to User and Problem
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  testCases TestCaseResult[] // Results of individual test cases
 }
 
+// TestCaseResult model - details result for each test case of a submission
 model TestCaseResult {
-  id            String     @id @default(uuid())
-  submissionId  String
-  testCase      Int
-  passed        Boolean
-  stdout        String?
-  stderr        String?
-  expected      String
-  compileOutput String?
-  status        String // Accepted, Wrong Answer
-  memory        String?
-  time          String?
-  createdAt     DateTime   @default(now())
-  // Relationship
-  Submission    Submission @relation(fields: [submissionId], references: [id])
+  id            String   @id @default(uuid())       // Unique identifier
+  submissionId  String                             // Related submission ID
+  testCase      Int                                // Test case number
+  passed        Boolean                            // Whether test case passed
+  stdout        String?                            // Output from code
+  stderr        String?                            // Error output (if any)
+  expected      String                             // Expected output
+  compileOutput String?                            // Compilation errors (if any)
+  status        String                             // Status (Accepted, Wrong Answer, etc.)
+  memory        String?                            // Memory used
+  time          String?                            // Execution time
+  createdAt     DateTime @default(now())           // Result timestamp
 
-  @@index([submissionId])
+  // Relationship to Submission
+  Submission Submission @relation(fields: [submissionId], references: [id])
+
+  @@index([submissionId]) // Index for faster querying by submission ID
 }
