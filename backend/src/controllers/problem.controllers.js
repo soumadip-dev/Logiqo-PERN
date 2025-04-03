@@ -310,7 +310,38 @@ const updateProblem = async (req, res) => {
 };
 
 // CONTROLLER FOR DELETE PROBLEM BY ID
-const deleteProblem = async (req, res) => {};
+const deleteProblem = async (req, res) => {
+  // Extract the problem ID from the request parameters
+  const { id } = req.params;
+
+  try {
+    // Check if the problem exists in the database
+    const problem = await db.problem.findUnique({ where: { id } });
+
+    // If the problem doesn't exist, send a 404 error response
+    if (!problem) {
+      return res.status(404).json({
+        success: false,
+        error: 'Problem not found',
+      });
+    }
+
+    // Delete the problem from the database
+    await db.problem.delete({ where: { id } });
+
+    // Send a success response to the client
+    res.status(200).json({
+      success: true,
+      message: 'Problem deleted successfully',
+    });
+  } catch (error) {
+    console.error('Error in deleteProblem controller', error);
+    res.status(500).json({
+      error: 'Server Error',
+      success: false,
+    });
+  }
+};
 
 // CONTROLLER FOR GET ALL PROBLEMS SOLVED BY USER
 const getAllProblemsSolvedByUser = async (req, res) => {};
