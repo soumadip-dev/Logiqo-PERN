@@ -121,7 +121,33 @@ const createProblem = async (req, res) => {
 };
 
 // CONTROLLER FOR GET ALL PROBLEMS
-const getAllProblems = async (req, res) => {};
+const getAllProblems = async (req, res) => {
+  try {
+    // Fetch all problems from the database
+    const problems = await db.problem.findMany();
+
+    // If no problems found, return error
+    if (!problems) {
+      return res.status(404).json({
+        success: false,
+        error: 'No problems found',
+      });
+    }
+
+    // Send success response to user
+    res.status(200).json({
+      success: true,
+      message: 'Problems fetched successfully',
+      problems,
+    });
+  } catch (error) {
+    console.error('Error in getAllProblems controller:', error);
+    res.status(500).json({
+      error: 'Server Error',
+      success: false,
+    });
+  }
+};
 
 // CONTROLLER FOR GET PROBLEM BY ID
 const getProblemById = async (req, res) => {};
