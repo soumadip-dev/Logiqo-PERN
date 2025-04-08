@@ -150,7 +150,36 @@ const getAllProblems = async (req, res) => {
 };
 
 // CONTROLLER FOR GET PROBLEM BY ID
-const getProblemById = async (req, res) => {};
+const getProblemById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Fetch problem from the database by ID
+    const problem = await db.problem.findUnique({
+      where: { id },
+    });
+
+    // If no problem found, return error
+    if (!problem) {
+      return res.status(404).json({
+        success: false,
+        error: 'Problem not found',
+      });
+    }
+
+    // Send success response to user
+    res.status(200).json({
+      success: true,
+      message: 'Problem fetched successfully',
+      problem,
+    });
+  } catch (error) {
+    console.error('Error in getProblemById controller:', error);
+    res.status(500).json({
+      error: 'Server Error',
+      success: false,
+    });
+  }
+};
 
 // CONTROLLER FOR UPDATE PROBLEM BY ID
 const updateProblem = async (req, res) => {};
