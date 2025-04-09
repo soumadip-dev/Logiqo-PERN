@@ -151,6 +151,7 @@ const getAllProblems = async (req, res) => {
 
 // CONTROLLER FOR GET PROBLEM BY ID
 const getProblemById = async (req, res) => {
+  // Extract problem ID from request parameters
   const { id } = req.params;
   try {
     // Fetch problem from the database by ID
@@ -182,7 +183,131 @@ const getProblemById = async (req, res) => {
 };
 
 // CONTROLLER FOR UPDATE PROBLEM BY ID
-const updateProblem = async (req, res) => {};
+const updateProblem = async (req, res) => {
+  // Extract problem ID from request parameters
+  const { id } = req.params;
+
+  // Extract all problem-related data from request body
+  const {
+    title,
+    description,
+    difficulty,
+    tags,
+    examples,
+    constraints,
+    testcases,
+    codeSnippets,
+    referenceSolutions,
+  } = req.body;
+
+  // Check if all required fields are present
+  if (
+    !title ||
+    !description ||
+    !difficulty ||
+    !tags ||
+    !examples ||
+    !constraints ||
+    !testcases ||
+    !codeSnippets ||
+    !referenceSolutions
+  ) {
+    return res.status(400).json({
+      success: false,
+      error: 'Missing required fields',
+    });
+  }
+
+  // Check if user is an admin
+  if (req.user.role !== 'ADMIN') {
+    return res.status(403).json({
+      success: false,
+      error: 'Forbidden - you are not allowed to update this problem',
+    });
+  }
+  try {
+    // Check if problem exists in the database
+    const problem = await db.problem.findUnique({ where: { id } });
+
+    if (!problem) {
+      return res.status(404).json({
+        success: false,
+        error: 'Problem not found',
+      });
+    }
+
+    // Loop through each reference solution using testcase
+    for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
+      const languageId = await getJudge0LanguageId(language);
+
+      // If the language is not supported, send an error response
+      if (!languageId) {
+        return res.status(400).json({
+          success: false,
+          error: `${language} is not supported in logiqo at the moment`,
+        });
+      }
+
+      // Prepare data for submission to Judge0
+      const submission = testcases.map(({ input, output }) => ({
+        source_code: solutionCode,
+        language_id: languageId,
+        stdin: input,
+        expected_output: output,
+      }));
+
+      // Send all submissions to Judge0
+      const submissionResults = await submissionBatch(submission);
+
+      // Get the tokens from the submission results
+      const tokens = submissionResults.map(result => result.token);
+
+      // Keep polling Judge0 until all submissions are finished
+      const results = await pollBatchResults(tokens);
+
+      // Check if all testcases are passed
+      for (let i = 0; i < results.length; i++) {
+        const result = results[i];
+        console.log('RESULT:::::::', result);
+
+        if (result.status.id !== 3) {
+          return res.status(400).json({
+            success: false,
+            error: `Testcase ${i + 1} is not passed for ${language}`,
+          });
+        }
+      }
+    }
+    // Update problem in the database
+    const updatedProblem = await db.problem.update({
+      where: { id },
+      data: {
+        title,
+        description,
+        difficulty,
+        tags,
+        examples,
+        constraints,
+        testcases,
+        codeSnippets,
+        referenceSolutions,
+      },
+    });
+
+    // Send success response to user
+    res.status(200).json({
+      success: true,
+      message: 'Problem updated successfully',
+      problem: updatedProblem,
+    });
+  } catch (error) {
+    console.error('Error in updateProblem controller:', error);
+    res.status(500).json({
+      error: 'Server Error',
+      success: false,
+    });
+  }
+};
 
 // CONTROLLER FOR DELETE PROBLEM BY ID
 const deleteProblem = async (req, res) => {};
