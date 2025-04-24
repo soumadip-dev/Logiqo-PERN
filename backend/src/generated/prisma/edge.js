@@ -151,7 +151,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
@@ -161,17 +161,16 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": null
+        "value": "postgresql://myuser:mypassword@localhost:5432/postgres"
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum UserRole {\n  ADMIN\n  USER\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  name      String?\n  email     String   @unique\n  image     String?\n  role      UserRole\n  password  String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n",
-  "inlineSchemaHash": "53e6a56b2802cbd9ef50559cc45c59442656a7959ba088cc3f9e6983670b47bb",
+  "inlineSchema": "// Prisma schema file\n// Documentation: https://pris.ly/d/prisma-schema\n\n// Generates the Prisma Client into the specified output folder\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\n// Defines the database source and connection URL\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Enum for user roles within the application\nenum UserRole {\n  ADMIN\n  USER\n}\n\n// User model definition\nmodel User {\n  id        String   @id @default(uuid())\n  name      String?\n  email     String   @unique\n  image     String?\n  role      UserRole\n  password  String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n",
+  "inlineSchemaHash": "dd45cdf8db545d542a347267ed42bcc9e09fbf3da8b1c34f3dc6a628c79bf210",
   "copyEngine": true
 }
 config.dirname = '/'
