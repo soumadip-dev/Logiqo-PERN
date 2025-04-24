@@ -8,6 +8,8 @@ import {
   userProfile,
 } from '../controllers/auth.controllers.js';
 
+import { authMiddleware } from '../middlewares/auth.middlewares.js';
+
 // CREATING ROUTER INSTANCE
 const router = Router();
 
@@ -18,10 +20,10 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 
 // USER LOGOUT ROUTE
-router.post('/logout', logoutUser);
+router.post('/logout', authMiddleware, logoutUser);
 
 // USER PROFILE ROUTE
-router.get('/profile', userProfile);
+router.get('/profile', authMiddleware, userProfile);
 
 // EXPORTING ROUTER INSTANCE
 export default router;

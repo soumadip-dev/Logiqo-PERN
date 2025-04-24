@@ -163,7 +163,21 @@ const logoutUser = async (req, res) => {
 };
 
 // CONTROLLER FOR PROFILE
-const userProfile = async (req, res) => {};
+const userProfile = async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      user: req.user,
+      message: 'User profile fetched successfully',
+    });
+  } catch (error) {
+    console.error('Profile error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Something went wrong. Please try again later.',
+    });
+  }
+};
 
 // EXPORTING CONTROLLERS
 export { loginUser, logoutUser, registerUser, userProfile };
