@@ -12,7 +12,9 @@ const registerUser = async (req, res) => {
 
     // Validate input
     if (!name || !email || !password) {
-      return res.status(400).json({ error: 'All fields are required' });
+      return res
+        .status(400)
+        .json({ success: false, error: 'All fields are required' });
     }
 
     // Check if user already exists in the database
@@ -22,6 +24,7 @@ const registerUser = async (req, res) => {
 
     if (existingUser) {
       return res.status(400).json({
+        success: false,
         error: 'User already exists with this email',
       });
     }
@@ -54,6 +57,7 @@ const registerUser = async (req, res) => {
 
     // Return a success response
     res.status(201).json({
+      success: true,
       message: 'User registered successfully',
       user: {
         id: newUser.id,
@@ -65,9 +69,10 @@ const registerUser = async (req, res) => {
     });
   } catch (error) {
     console.error('Registration error:', error);
-    res
-      .status(500)
-      .json({ error: 'Something went wrong. Please try again later.' });
+    res.status(500).json({
+      success: false,
+      error: 'Something went wrong. Please try again later.',
+    });
   }
 };
 
@@ -79,7 +84,9 @@ const loginUser = async (req, res) => {
 
     // Validate if email and password exist
     if (!email || !password) {
-      return res.status(400).json({ error: 'All fields are required' });
+      return res
+        .status(400)
+        .json({ success: false, error: 'All fields are required' });
     }
 
     // Fnd user based on email
@@ -89,7 +96,7 @@ const loginUser = async (req, res) => {
 
     // If user not found, return error
     if (!user) {
-      return res.status(400).json({ error: 'User not found' });
+      return res.status(400).json({ success: false, error: 'User not found' });
     }
 
     // Compare password with hashed password
@@ -97,8 +104,11 @@ const loginUser = async (req, res) => {
 
     // If password is invalid, return error
     if (!isPasswordValid) {
-      return res.status(400).json({ error: 'Invalid Credentials' });
+      return res
+        .status(400)
+        .json({ success: false, error: 'Invalid Credentials' });
     }
+
     // Generate JWT token
     const token = jwt.sign({ id: user.id }, process.env.JWT_TOKEN_SECRET, {
       expiresIn: process.env.JWT_TOKEN_EXPIRY,
@@ -114,6 +124,7 @@ const loginUser = async (req, res) => {
 
     // Send success response to user
     res.status(200).json({
+      success: true,
       message: 'User logged in successfully',
       user: {
         id: user.id,
@@ -125,14 +136,31 @@ const loginUser = async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res
-      .status(500)
-      .json({ error: 'Something went wrong. Please try again later.' });
+    res.status(500).json({
+      success: false,
+      error: 'Something went wrong. Please try again later.',
+    });
   }
 };
 
 // CONTROLLER FOR LOGOUT USER
-const logoutUser = async (req, res) => {};
+const logoutUser = async (req, res) => {
+  try {
+    // Clear the cookie
+    res.cookie('jwt', '', {});
+
+    // Send success response to user
+    res
+      .status(200)
+      .json({ success: true, message: 'User logged out successfully' });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Something went wrong. Please try again later.',
+    });
+  }
+};
 
 // CONTROLLER FOR PROFILE
 const userProfile = async (req, res) => {};
