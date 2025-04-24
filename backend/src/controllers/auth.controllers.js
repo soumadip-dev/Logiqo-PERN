@@ -72,7 +72,64 @@ const registerUser = async (req, res) => {
 };
 
 // CONTROLLER FOR LOGIN USER
-const loginUser = async (req, res) => {};
+const loginUser = async (req, res) => {
+  try {
+    // Get user credentials from request body
+    const { email, password } = req.body;
+
+    // Validate if email and password exist
+    if (!email || !password) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    // Fnd user based on email
+    const user = await db.user.findUnique({
+      where: { email },
+    });
+
+    // If user not found, return error
+    if (!user) {
+      return res.status(400).json({ error: 'User not found' });
+    }
+
+    // Compare password with hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    // If password is invalid, return error
+    if (!isPasswordValid) {
+      return res.status(400).json({ error: 'Invalid Credentials' });
+    }
+    // Generate JWT token
+    const token = jwt.sign({ id: user.id }, process.env.JWT_TOKEN_SECRET, {
+      expiresIn: process.env.JWT_TOKEN_EXPIRY,
+    });
+
+    // Store JWT token in cookie
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV !== 'development',
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    });
+
+    // Send success response to user
+    res.status(200).json({
+      message: 'User logged in successfully',
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        image: user.image,
+      },
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res
+      .status(500)
+      .json({ error: 'Something went wrong. Please try again later.' });
+  }
+};
 
 // CONTROLLER FOR LOGOUT USER
 const logoutUser = async (req, res) => {};
