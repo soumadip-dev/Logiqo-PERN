@@ -1,0 +1,28 @@
+{
+  "name": "logiqo-backend",
+  "version": "1.0.0",
+  "description": "Backend for a modern coding platform for mastering data structures and algorithms through interactive challenges and real-time feedback.",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "algorithms",
+    "coding-challenges",
+    "dsa",
+    "programming"
+  ],
+  "author": "Soumadip Majila",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.6.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "prisma": "^6.6.0"
+  }
+}
