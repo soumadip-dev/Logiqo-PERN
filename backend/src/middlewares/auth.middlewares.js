@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { db } from '../libs/db.js';
 
-// Middleware function to authenticate user requests using JWT
+// MIDDLEWARE FUNCTION TO AUTHENTICATE USER REQUESTS USING JWT
 export const authMiddleware = async (req, res, next) => {
   try {
     // Extract the token from cookies
@@ -48,6 +48,30 @@ export const authMiddleware = async (req, res, next) => {
     res.status(500).json({
       success: false,
       message: 'Server Error',
+    });
+  }
+};
+
+// MIDDLEWARE FUNCTION TO CHECK IF USER IS AN ADMIN
+export const checkAdmin = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const user = awaitdb.user.findUnique({
+      where: { id: userId },
+      select: { role: true },
+    });
+    if (!user || user.role !== 'ADMIN') {
+      return res.status(403).json({
+        success: false,
+        message: 'Forbidden - User is not an admin',
+      });
+    }
+    next();
+  } catch (error) {
+    console.error('Error in checkAdmin middleware:', error.message);
+    res.status(500).json({
+      message: 'Server Error',
+      success: false,
     });
   }
 };
