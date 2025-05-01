@@ -63,14 +63,14 @@ export const checkAdmin = async (req, res, next) => {
     if (!user || user.role !== 'ADMIN') {
       return res.status(403).json({
         success: false,
-        message: 'Forbidden - User is not an admin',
+        error: 'Forbidden - User is not an admin',
       });
     }
     next();
   } catch (error) {
     console.error('Error in checkAdmin middleware:', error.message);
     res.status(500).json({
-      message: 'Server Error',
+      error: 'Server Error',
       success: false,
     });
   }
