@@ -4,6 +4,7 @@ import cors from 'cors';
 import express from 'express';
 
 import authRoutes from './routes/auth.routes.js';
+import problemRoutes from './routes/problem.routes.js';
 
 // CREATE AN EXPRESS APPLICATION
 const app = express();
@@ -27,6 +28,7 @@ app.use(cookieParser());
 // ROUTES
 // app.use('/api/v1/healthcheck', healthCheckRouter);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/problems', problemRoutes);
 
 // EXPORTING THE APP
 export default app;
