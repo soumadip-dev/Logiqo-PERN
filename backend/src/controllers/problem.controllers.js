@@ -64,30 +64,29 @@ const createProblem = async (req, res) => {
           });
         }
       }
-
-      //
-      const newProblem = await db.problem.create({
-        data: {
-          title,
-          description,
-          difficulty,
-          tags,
-          examples,
-          constraints,
-          testcases,
-          codeSnippets,
-          referenceSolutions,
-          userId: req.user.id,
-        },
-      });
-
-      // Send success response to user
-      res.status(201).json({
-        success: true,
-        message: 'Problem created successfully',
-        problem: newProblem,
-      });
     }
+    // Create the problem in the database
+    const newProblem = await db.problem.create({
+      data: {
+        title,
+        description,
+        difficulty,
+        tags,
+        examples,
+        constraints,
+        testcases,
+        codeSnippets,
+        referenceSolutions,
+        userId: req.user.id,
+      },
+    });
+
+    // Send success response to user
+    res.status(201).json({
+      success: true,
+      message: 'Problem created successfully',
+      problem: newProblem,
+    });
   } catch (err) {
     console.error('Error in createProblem controller:', err.message);
     res.status(500).json({
