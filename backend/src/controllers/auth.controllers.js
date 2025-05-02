@@ -89,7 +89,7 @@ const loginUser = async (req, res) => {
         .json({ success: false, error: 'All fields are required' });
     }
 
-    // Fnd user based on email
+    // Find user based on email
     const user = await db.user.findUnique({
       where: { email },
     });
@@ -147,7 +147,11 @@ const loginUser = async (req, res) => {
 const logoutUser = async (req, res) => {
   try {
     // Clear the cookie
-    res.cookie('jwt', '', {});
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV !== 'development',
+    });
 
     // Send success response to user
     res
