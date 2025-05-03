@@ -1,29 +1,30 @@
 // IMPORTING MODULES
-import { pollBatchResults, submissionBatch } from '../libs/judge0.lib.js';
+import { db } from '../libs/db.js';
+import { getJudge0LanguageId, submissionBatch } from '../libs/judge0.lib.js';
 
 // CONTROLLER FUNCTION TO CREATE A PROBLEM
 const createProblem = async (req, res) => {
+  // Extract all problem-related data from request body
+  const {
+    title,
+    description,
+    difficulty,
+    tags,
+    examples,
+    constraints,
+    testcases,
+    codeSnippets,
+    referenceSolutions,
+  } = req.body;
+
+  // Check if the user is an admin
+  if (req.user.role !== 'ADMIN') {
+    return res.status(403).json({
+      success: false,
+      error: 'Forbidden - you are not allowed to create a problem',
+    });
+  }
   try {
-    // Extract all problem-related data from request body
-    const {
-      title,
-      description,
-      difficulty,
-      tags,
-      examples,
-      constraints,
-      testcases,
-      codeSnippets,
-      referenceSolutions,
-    } = req.body;
-
-    // Check if the user is an admin
-    if (req.user.role !== 'ADMIN')
-      return res.status(403).json({
-        success: false,
-        error: 'Forbidden - you are not allowed to create a problem',
-      });
-
     // Loop through each reference solution for different languages
     for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
       const languageId = getJudge0LanguageId(language);
@@ -48,7 +49,7 @@ const createProblem = async (req, res) => {
       const submissionResults = await submissionBatch(submissions);
 
       // Extract tokens (submission IDs) from Judge0's response
-      const tokens = submissionResults.map((result) => result.token);
+      const tokens = submissionResults.map(result => result.token);
 
       // Poll Judge0 repeatedly until all submissions are processed
       const results = await pollBatchResults(tokens);
