@@ -171,7 +171,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\souma\\Desktop\\Logiqo\\backend\\src\\generated\\prisma",
+      "value": "D:\\Logiqo\\backend\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -185,7 +185,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\souma\\Desktop\\Logiqo\\backend\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\Logiqo\\backend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

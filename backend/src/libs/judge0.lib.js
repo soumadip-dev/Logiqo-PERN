@@ -12,9 +12,9 @@ export const getJudge0LanguageId = language => {
 };
 
 // SEND MULTIPLE SUBMISSIONS TO JUDGE0 AND RETURN THE RESPONSE (INCLUDING TOKENS)
-export const submissionBatch = async submissions => {
+export const submissionBatch = async (submissions) => {
   const { data } = await axios.post(
-    `${process.env.JUFGE0_API_URL}/submissions/batch?base64_encoded=false`,
+    `${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`,
     { submissions }
   );
   console.log('Submission Results: ' + data);

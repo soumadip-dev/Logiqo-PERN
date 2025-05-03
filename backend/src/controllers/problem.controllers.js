@@ -112,7 +112,7 @@ const createProblem = async (req, res) => {
       problem: newProblem,
     });
   } catch (err) {
-    console.error('Error in createProblem controller:', err.message);
+    console.error('Error in createProblem controller:', err);
     res.status(500).json({
       error: 'Server Error',
       success: false,
