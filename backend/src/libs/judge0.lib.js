@@ -30,7 +30,9 @@ export const pollBatchResults = async tokens => {
   while (true) {
     const { data } = await axios.get(
       `${process.env.JUFGE0_API_URL}/submissions/bacth`,
-      { tokens: tokens.join(','), base64_encoded: false }
+      {
+        params: { tokens: tokens.join(','), base64_encoded: false },
+      }
     );
   }
   const results = data.submissions;
