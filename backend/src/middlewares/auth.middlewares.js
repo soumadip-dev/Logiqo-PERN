@@ -1,3 +1,4 @@
+// IMPORTS
 import jwt from 'jsonwebtoken';
 import { db } from '../libs/db.js';
 
@@ -11,7 +12,7 @@ export const authMiddleware = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: 'Unauthorized - No token found',
+        error: 'Unauthorized - No token found',
       });
     }
 
@@ -36,7 +37,7 @@ export const authMiddleware = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Unauthorized - User not found',
+        error: 'Unauthorized - User not found',
       });
     }
 
@@ -47,7 +48,7 @@ export const authMiddleware = async (req, res, next) => {
     console.error(error.message);
     res.status(500).json({
       success: false,
-      message: 'Server Error',
+      error: 'Server Error',
     });
   }
 };
@@ -56,7 +57,7 @@ export const authMiddleware = async (req, res, next) => {
 export const checkAdmin = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const user = awaitdb.user.findUnique({
+    const user = await db.user.findUnique({
       where: { id: userId },
       select: { role: true },
     });
@@ -70,8 +71,8 @@ export const checkAdmin = async (req, res, next) => {
   } catch (error) {
     console.error('Error in checkAdmin middleware:', error.message);
     res.status(500).json({
-      error: 'Server Error',
       success: false,
+      error: 'Server Error',
     });
   }
 };
