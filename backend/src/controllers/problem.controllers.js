@@ -1,6 +1,10 @@
 // IMPORTING MODULES
 import { db } from '../libs/db.js';
-import { getJudge0LanguageId, submissionBatch } from '../libs/judge0.lib.js';
+import {
+  getJudge0LanguageId,
+  pollBatchResults,
+  submissionBatch,
+} from '../libs/judge0.lib.js';
 
 // CONTROLLER FUNCTION TO CREATE A PROBLEM
 const createProblem = async (req, res) => {
@@ -16,6 +20,24 @@ const createProblem = async (req, res) => {
     codeSnippets,
     referenceSolutions,
   } = req.body;
+
+  // Check if all required fields are present
+  if (
+    !title ||
+    !description ||
+    !difficulty ||
+    !tags ||
+    !examples ||
+    !constraints ||
+    !testcases ||
+    !codeSnippets ||
+    !referenceSolutions
+  ) {
+    return res.status(400).json({
+      success: false,
+      error: 'Missing required fields',
+    });
+  }
 
   // Check if the user is an admin
   if (req.user.role !== 'ADMIN') {
@@ -57,6 +79,7 @@ const createProblem = async (req, res) => {
       // Check if all testcases are passed
       for (let i = 0; i < results.length; i++) {
         const result = results[i];
+        console.log('RESULT:::::::', result);
 
         if (result.status.id !== 3) {
           return res.status(400).json({
