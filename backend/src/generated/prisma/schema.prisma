@@ -56,5 +56,5 @@ model Problem {
   updatedAt          DateTime   @updatedAt
 
   // Relationship
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade) // fixed extra parentheses
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

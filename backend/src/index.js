@@ -1,15 +1,30 @@
-// IMPORTING MODULES
+// IMPORTS
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
-import app from './app.js';
+import express from 'express';
+import authRoutes from './routes/auth.routes.js';
+import problemRoutes from './routes/problem.routes.js'
 
-// CONFIGURE DOTENV TO LOAD ENVIRONMENT VARIABLES
-dotenv.config({
-  path: './.env',
+dotenv.config();
+
+// CREATE AN EXPRESS APPLICATION
+const app = express();
+
+// ESSENTIAL MIDDLEWARE
+app.use(express.json());
+app.use(cookieParser());
+
+// ROOT ROUTE
+app.get('/', (req, res) => {
+  res.send('Hello guies welsome to logiqo 🔥');
 });
 
-// SET THE PORT FOR THE SERVER
-const PORT = process.env.PORT || 8080;
+const port = process.env.PORT || 8000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
+// ROUTES
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/problems', problemRoutes);
+
+app.listen(port, () => {
+  console.log('Server is running on ' + port);
 });

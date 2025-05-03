@@ -8,15 +8,14 @@ A platform to master data structures and algorithms through interactive challeng
 
 <!--
 
-docker run --name my-postgres -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypassword -p 5432:5432 -d postgres
-
+docker run --name logiqo -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypassword -p 5432:5432 -d postgres
 
 
 
 
 Daily:
 -----
-docker start my-postgres
+docker start logiqo
 ######## Go to the Judge0 project folder Start Judge0 services (db, redis, api, etc.)
 docker-compose up -d
 ######## Start your backend server
