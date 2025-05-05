@@ -23,3 +23,8 @@ npm run dev
 
 
 -->
+<!-- 
+cd ~/Dev/judge0-v1.13.1
+docker-compose up -d
+
+ -->
