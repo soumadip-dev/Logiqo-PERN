@@ -4,9 +4,9 @@ import {
   createProblem,
   deleteProblem,
   getAllProblems,
+  getAllProblemsSolvedByUser,
   getProblemById,
   updateProblem,
-  getAllProblemsSolvedByUser,
 } from '../controllers/problem.controllers.js';
 import { authMiddleware, checkAdmin } from '../middlewares/auth.middlewares.js';
 
@@ -26,7 +26,7 @@ router.get('/get-problem/:id', authMiddleware, getProblemById);
 router.put('/update-problem/:id', authMiddleware, checkAdmin, updateProblem);
 
 // DELETE PROBLEM BY ID ROUTE
-router.delete('delete-problem/:id', authMiddleware, checkAdmin, deleteProblem);
+router.delete('/delete-problem/:id', authMiddleware, checkAdmin, deleteProblem);
 
 // GET ALL PROBLEMS SOLVED BY USER ROUTE
 router.get('/get-solved-problems', authMiddleware, getAllProblemsSolvedByUser);
