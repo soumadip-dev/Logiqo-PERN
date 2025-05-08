@@ -50,3 +50,13 @@ export const pollBatchResults = async tokens => {
     await sleep(1000);
   }
 };
+
+// RETURN JUDGE0 LANGUAGE NAME BASED ON LANGUAGE ID
+export const getJudge0LanguageName = id => {
+  const languageMap = {
+    71: 'PYTHON',
+    62: 'JAVA',
+    63: 'JAVASCRIPT',
+  };
+  return languageMap[id] || 'Unknown';
+};
