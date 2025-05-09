@@ -344,7 +344,43 @@ const deleteProblem = async (req, res) => {
 };
 
 // CONTROLLER FOR GET ALL PROBLEMS SOLVED BY USER
-const getAllProblemsSolvedByUser = async (req, res) => {};
+const getAllProblemsSolvedByUser = async (req, res) => {
+  try {
+    // Extract user ID from request
+    const userId = req.user.id;
+
+    // Fetch all problems solved by the user from the database
+    const problems = await db.problem.findMany({
+      where: {
+        solvedBy: {
+          some: {
+            userId: userId,
+          },
+        },
+      },
+      include: {
+        solvedBy: {
+          where: {
+            userId: userId,
+          },
+        },
+      },
+    });
+
+    // Return success response with problems
+    res.status(200).json({
+      message: 'Problem fetched successfully',
+      success: true,
+      problems,
+    });
+  } catch (error) {
+    console.error('Error in getAllProblemsSolvedByUser controller:', error);
+    res.status(500).json({
+      error: 'Server Error',
+      success: false,
+    });
+  }
+};
 
 // EXPORTING CONTROLLERS
 export {
