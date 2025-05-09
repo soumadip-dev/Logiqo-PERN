@@ -37,7 +37,22 @@ const createPlaylist = async (req, res) => {
 // CONTROLLER FOR DELETE PLAYLIST
 const deletePlaylist = async (req, res) => {
   try {
-    // Your logic here
+    // Get playlist id from parameters
+    const { playlistId } = req.params;
+
+    // Remove playlist from database
+    const deletedPlayList = await db.playlist.delete({
+      where: {
+        id: playlistId,
+      },
+    });
+
+    // Send success response to user
+    res.status(200).json({
+      success: true,
+      message: 'Playlist deleted successfully',
+      deletedPlayList,
+    });
   } catch (error) {
     console.error('Error in deletePlaylist controller:', error.message);
     res.status(500).json({
@@ -169,7 +184,6 @@ const addProblemToPlaylist = async (req, res) => {
 // CONTROLLER FOR REMOVE PROBLEM FROM PLAYLIST
 const removeProblemFromPlaylist = async (req, res) => {
   try {
-    // Your logic here
   } catch (error) {
     console.error(
       'Error in removeProblemFromPlaylist controller:',
