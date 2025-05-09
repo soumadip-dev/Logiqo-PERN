@@ -50,7 +50,29 @@ const deletePlaylist = async (req, res) => {
 // CONTROLLER FOR GET ALL LIST DETAILS
 const getAllListDetails = async (req, res) => {
   try {
-    // Your logic here
+    // Get user id from request
+    const userId = req.user.id;
+
+    // Fetch all playlists for the user
+    const playlists = await db.playlist.findMany({
+      where: {
+        userId: userId,
+      },
+      include: {
+        problems: {
+          include: {
+            problem: true,
+          },
+        },
+      },
+    });
+
+    // Send success response to user
+    res.status(200).json({
+      success: true,
+      message: 'Playlists fetched successfully',
+      playlists,
+    });
   } catch (error) {
     console.error('Error in getAllListDetails controller:', error.message);
     res.status(500).json({
