@@ -129,7 +129,34 @@ const getPlayListDetails = async (req, res) => {
 // CONTROLLER FOR ADD PROBLEM TO PLAYLIST
 const addProblemToPlaylist = async (req, res) => {
   try {
-    // Your logic here
+    // Get playlist id from parameters
+    const { playlistId } = req.params;
+
+    // Get problem id from body
+    const { problemIds } = req.body;
+
+    // Check if problem ids is an array and not empty
+    if (!Array.isArray(problemIds) || problemIds.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid or missing problem ids',
+      });
+    }
+
+    // Add problems to playlist in database
+    const problemsInPlaylist = await db.ProblemInPlaylist.createMany({
+      data: problemIds.map(problemId => ({
+        playlistId,
+        problemId,
+      })),
+    });
+
+    // Send success response to user
+    res.status(201).json({
+      success: true,
+      message: 'Problem added to playlist successfully',
+      problemsInPlaylist,
+    });
   } catch (error) {
     console.error('Error in addProblemToPlaylist controller:', error.message);
     res.status(500).json({
