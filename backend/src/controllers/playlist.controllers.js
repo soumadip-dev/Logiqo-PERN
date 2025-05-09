@@ -47,7 +47,7 @@ const deletePlaylist = async (req, res) => {
   }
 };
 
-// CONTROLLER FOR GET ALL LIST DETAILS
+// CONTROLLER FOR GET ALL Play LIST DETAILS
 const getAllListDetails = async (req, res) => {
   try {
     // Get user id from request
@@ -85,7 +85,38 @@ const getAllListDetails = async (req, res) => {
 // CONTROLLER FOR GET PLAYLIST DETAILS
 const getPlayListDetails = async (req, res) => {
   try {
-    // Your logic here
+    // Get playlist id from params
+    const { playlistId } = req.params;
+
+    // Fetch playlist from database
+    const playlist = await db.playlist.findUnique({
+      where: {
+        id: playlistId,
+        userId: req.user.id,
+      },
+      include: {
+        problems: {
+          include: {
+            problem: true,
+          },
+        },
+      },
+    });
+
+    // If no playlist found, return error
+    if (!playlist) {
+      return res.status(404).json({
+        success: false,
+        error: 'Playlist not found',
+      });
+    }
+
+    // Send success response to user
+    res.status(200).json({
+      success: true,
+      message: 'Playlist fetched successfully',
+      playlist,
+    });
   } catch (error) {
     console.error('Error in getPlayListDetails controller:', error.message);
     res.status(500).json({
