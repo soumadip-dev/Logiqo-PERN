@@ -184,6 +184,33 @@ const addProblemToPlaylist = async (req, res) => {
 // CONTROLLER FOR REMOVE PROBLEM FROM PLAYLIST
 const removeProblemFromPlaylist = async (req, res) => {
   try {
+    // Get playlist id from parameters
+    const { playlistId } = req.params;
+
+    // GEt problemids from body
+    const { problemIds } = req.body;
+
+    // Check if problem ids is an array and not empty
+    if (!Array.isArray(problemIds) || problemIds.length === 0) {
+      return res.status(400).json({ error: 'Invalid or missing problemsId' });
+    }
+
+    // Remove problems from playlist in database
+    const deleteProblem = await db.problemsInPlaylist.deleteMany({
+      where: {
+        playlistId,
+        problemId: {
+          in: problemIds,
+        },
+      },
+    });
+
+    // Send success response to user
+    res.status(200).json({
+      success: true,
+      message: 'Problem removed from playlist successfully',
+      deleteProblem,
+    })
   } catch (error) {
     console.error(
       'Error in removeProblemFromPlaylist controller:',
