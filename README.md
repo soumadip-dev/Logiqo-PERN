@@ -45,8 +45,49 @@
 
 ## 📦 Installation
 
+### 1. Clone the repository
+
 ```bash
 git clone https://github.com/soumadip-dev/Logiqo.git
+cd Logiqo
+```
+
+### 2. Set up Judge0 (Code Execution Engine)
+
+Follow the official [Judge0 Docker setup guide](https://github.com/judge0/judge0/blob/master/CHANGELOG.md) to configure the code execution environment.
+
+### 3. Configure PostgreSQL
+
+Run PostgreSQL in Docker (replace placeholders with your credentials):
+
+```bash
+docker run --name logiqo-db \
+  -e POSTGRES_USER=<your_username> \
+  -e POSTGRES_PASSWORD=<your_password> \
+  -p 5432:5432 \
+  -d postgres
+
+# To start the container after initial setup:
+docker start logiqo-db
+```
+
+### 4. Configure Environment Variables
+
+Create a `.env` file in the backend folder with these configurations:
+
+```env
+########## SERVER CONFIGURATION ##########
+PORT=<server_port>
+
+########## DATABASE CONFIGURATION ##########
+DATABASE_URL="postgresql://<your_username>:<your_password>@localhost:5432/logiqo?schema=public"
+
+########## AUTHENTICATION ##########
+JWT_TOKEN_SECRET=<your_random_secret_key>
+JWT_TOKEN_EXPIRY=<token_expiry_duration>
+
+########## JUDGE0 INTEGRATION ##########
+JUDGE0_API_URL=http://localhost:2358
 ```
 
 <!--
