@@ -43,8 +43,14 @@ const SignUpPage = () => {
   return (
     <div className="h-screen grid lg:grid-cols-2 bg-gray-900">
       {/* Left Side - Form */}
-      <div className="flex flex-col justify-center items-center p-6 sm:p-12">
-        <div className="w-full max-w-md space-y-8 bg-gray-800 rounded-2xl p-8 shadow-2xl border border-gray-700 hover:shadow-primary/10 transition-all duration-500">
+      <div className="flex flex-col justify-center items-center p-6 sm:p-12 relative overflow-hidden">
+        {/* Subtle background pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-primary blur-3xl"></div>
+          <div className="absolute top-3/4 left-3/4 w-40 h-40 rounded-full bg-purple-600 blur-3xl"></div>
+        </div>
+
+        <div className="w-full max-w-md space-y-8 bg-gray-800/90 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-gray-700 hover:shadow-primary/10 transition-all duration-500 relative z-10">
           {/* Logo */}
           <div className="text-center mb-10">
             <div className="flex flex-col items-center gap-3 group">
@@ -80,7 +86,7 @@ const SignUpPage = () => {
                 <input
                   type="text"
                   {...register('name')}
-                  className={`input w-full pl-10 bg-gray-700 border-gray-600 text-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-500 transition-all duration-300 ${
+                  className={`input w-full pl-10 bg-gray-700/80 border-gray-600 text-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-500 transition-all duration-300 ${
                     errors.name ? 'border-red-500' : 'hover:border-gray-500'
                   }`}
                   placeholder="John Doe"
@@ -108,7 +114,7 @@ const SignUpPage = () => {
                 <input
                   type="email"
                   {...register('email')}
-                  className={`input w-full pl-10 bg-gray-700 border-gray-600 text-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-500 transition-all duration-300 ${
+                  className={`input w-full pl-10 bg-gray-700/80 border-gray-600 text-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-500 transition-all duration-300 ${
                     errors.email ? 'border-red-500' : 'hover:border-gray-500'
                   }`}
                   placeholder="you@example.com"
@@ -136,7 +142,7 @@ const SignUpPage = () => {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   {...register('password')}
-                  className={`input w-full pl-10 bg-gray-700 border-gray-600 text-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-500 transition-all duration-300 ${
+                  className={`input w-full pl-10 bg-gray-700/80 border-gray-600 text-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-500 transition-all duration-300 ${
                     errors.password ? 'border-red-500' : 'hover:border-gray-500'
                   }`}
                   placeholder="••••••••"
@@ -165,7 +171,7 @@ const SignUpPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn w-full py-3 px-4 rounded-lg bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 border-none transform hover:-translate-y-0.5 active:translate-y-0"
+              className="btn w-full py-3 px-4 rounded-lg bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 border-none transform hover:-translate-y-0.5 active:translate-y-0 focus:ring-2 focus:ring-primary/50 focus:outline-none"
             >
               Sign Up
             </button>
