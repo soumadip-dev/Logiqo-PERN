@@ -14,11 +14,7 @@ const signUpSchema = z.object({
   password: z
     .string()
     .min(6, 'Password must be at least 6 characters')
-    .max(20, 'Password must be at most 20 characters')
-    .regex(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/,
-      'Password must contain at least one letter and one number'
-    ),
+    .max(20, 'Password must be at most 20 characters'),
   name: z.string().min(3, 'Name must be at least 3 characters'),
 });
 
