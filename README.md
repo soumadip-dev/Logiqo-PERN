@@ -5,22 +5,16 @@
 </h1>
 
 <div align="center">
-  <a href="https://github.com/soumadip-dev">
-    <img src="https://skillicons.dev/icons?i=nodejs,express,postgres,react,tailwindcss,docker,github" alt="Tech Stack" width="340" style="padding: 15px 0;">
-  </a>
+  <img src="https://skillicons.dev/icons?i=nodejs,express,postgres,react,tailwind,docker,github" alt="Tech Stack" width="340">
 </div>
 
-<h3 align="center">
-  Logiqo is a LeetCode-inspired platform designed to help developers enhance their coding skills by solving programming challenges in various languages, including JavaScript, Python, and Java.
-</h3>
-
----
-
 <p align="center">
-  <img src="https://github.com/Aestheticsuraj234/chai-or-leetcode/blob/main/frontend/public/thumbnail.png" alt="Screenshot" width="600">
+  Logiqo is a LeetCode-inspired platform designed to help developers enhance their coding skills by solving programming challenges in various languages, including JavaScript, Python, and Java.
 </p>
 
----
+<div align="center">
+  <img src="https://github.com/Aestheticsuraj234/chai-or-leetcode/blob/main/frontend/public/thumbnail.png" alt="Logiqo screenshot" width="800">
+</div>
 
 ## 🌟 Features
 
@@ -40,8 +34,6 @@
 - **Code Execution**: Integrated with the Judge0 API to run and validate code submissions.
 - **State Management**: Zustand for scalable and lightweight React state management.
 - **Version Control**: Git for version tracking and GitHub for code collaboration and hosting.
-
----
 
 ## 📦 Installation
 
