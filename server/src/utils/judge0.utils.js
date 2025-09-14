@@ -1,4 +1,4 @@
-//* Return the Judge0 language ID based on the language name
+//* Get the Judge0 language ID for a given language name
 function getJudge0LanguageId(language) {
   const languageMap = {
     PYTHON: 71,
@@ -8,8 +8,10 @@ function getJudge0LanguageId(language) {
     GO: 60,
     CSHARP: 51,
   };
+
+  // Return the corresponding language ID
   return languageMap[language.toUpperCase()];
 }
 
-//* Export utils
+// Export utility function
 export { getJudge0LanguageId };
