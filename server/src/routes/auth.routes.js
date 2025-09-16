@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { loginUser, logoutUser, registerUser, checkAuth } from '../controller/auth.controllers.js';
 import { authMiddleware } from '../middleware/auth.middlewares.js';
 
