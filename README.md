@@ -1,15 +1,11 @@
 <h1 align="center">
   <br>
-  Logiqo
+  Logiqo 🖥️
   <br>
 </h1>
 
-<div align="center">
-  <img src="https://skillicons.dev/icons?i=nodejs,express,postgres,react,tailwind,docker,github" alt="Tech Stack" width="340">
-</div>
-
 <p align="center">
-  Logiqo is a LeetCode-inspired platform designed to help developers enhance their coding skills by solving programming challenges in various languages, including JavaScript, Python, and Java.
+  Logiqo is a LeetCode-inspired platform for developers to practice coding in JavaScript, Python, and Java.
 </p>
 
 <div align="center">
@@ -18,85 +14,91 @@
 
 ## 🌟 Features
 
-- 🧠 **Interactive Code Editor** – Built with Monaco Editor, allowing users to write and test code in real-time.
-- 📖 **Detailed Problem Descriptions** – Each challenge includes comprehensive descriptions, examples, constraints, and helpful hints.
-- 🧪 **Automated Test Cases** – Validate solutions by running them against predefined test cases.
-- 🌍 **Support for Multiple Languages** – Write code in JavaScript, Python, or Java.
-- 📈 **Submission Tracking** – Track submissions with detailed information like memory usage, runtime, and result status (✅ Accepted, ❌ Wrong Answer, etc.).
-- 📱 **Mobile-Friendly Design** – A modern, responsive UI that works seamlessly across all devices.
+- 🧠 **Interactive Code Editor** – Built with Monaco Editor for real-time coding and testing.
+- 📖 **Detailed Problem Descriptions** – Comprehensive explanations, examples, constraints, and hints for each challenge.
+- 🧪 **Automated Test Cases** – Validate solutions by running them against predefined tests.
+- 🌍 **Multi-Language Support** – Solve problems using JavaScript, Python, or Java.
+- 📈 **Submission Tracking** – Monitor memory usage, runtime, and status (✅ Accepted, ❌ Wrong Answer, etc.).
+- 📱 **Responsive Design** – Works seamlessly on all devices with a modern UI.
 
-## 🛠 Tech Stack
+## ⚙️ Tech Stack
 
-- **Frontend**: React.js with Tailwind CSS for styling and Monaco Editor for code editing.
-- **Backend**: Node.js with Express.js for building RESTful APIs.
-- **Database**: PostgreSQL, optionally managed via Prisma ORM for type-safe data access.
-- **Authentication**: JWT (JSON Web Tokens) for secure user authentication.
-- **Code Execution**: Integrated with the Judge0 API to run and validate code submissions.
-- **State Management**: Zustand for scalable and lightweight React state management.
-- **Version Control**: Git for version tracking and GitHub for code collaboration and hosting.
+- **🎨 Frontend**: React.js, Tailwind CSS, Monaco Editor, Zustand
+- **🚀 Backend**: Node.js, Express.js
+- **🗄️ Database**: PostgreSQL with Prisma ORM
+- **🔐 Authentication**: JWT (JSON Web Tokens)
+- **🖥️ Code Execution**: Judge0 API
 
-## 📦 Installation
+## 🛠️ Installation & Setup
+
+### Prerequisites
+
+- Node.js (v18+)
+- npm or yarn
+- PostgreSQL database
+- RapidAPI account for Judge0 API
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/soumadip-dev/Logiqo.git
-cd Logiqo
+git clone https://github.com/soumadip-dev/Logiqo-PERN.git
+cd Logiqo-PERN
 ```
 
-### 2. Set up Judge0 (Code Execution Engine)
-
-Follow the official [Judge0 Docker setup guide](https://github.com/judge0/judge0/blob/master/CHANGELOG.md) to configure the code execution environment.
-
-### 3. Configure PostgreSQL
-
-Run PostgreSQL in Docker (replace placeholders with your credentials):
+### 2. Backend Setup
 
 ```bash
-docker run --name logiqo-db \
-  -e POSTGRES_USER=<your_username> \
-  -e POSTGRES_PASSWORD=<your_password> \
-  -p 5432:5432 \
-  -d postgres
-
-# To start the container after initial setup:
-docker start logiqo-db
+cd server
+npm install
 ```
 
-### 4. Configure Environment Variables
-
-Create a `.env` file in the backend folder with these configurations:
+Create a `.env` file in the `server` directory:
 
 ```env
-########## SERVER CONFIGURATION ##########
 PORT=<server_port>
-
-########## DATABASE CONFIGURATION ##########
-DATABASE_URL="postgresql://<your_username>:<your_password>@localhost:5432/logiqo?schema=public"
-
-########## AUTHENTICATION ##########
+FRONTEND_URL=<frontend_url>
+DATABASE_URL=<database_url>
+NODE_ENV=<development|production>
 JWT_TOKEN_SECRET=<your_random_secret_key>
 JWT_TOKEN_EXPIRY=<token_expiry_duration>
+RAPIDAPI_KEY=<your_rapidapi_key_judge0>
+RAPIDAPI_HOST=<your_rapidapi_host_judge0>
+JUDGE0_API_URL=<your_judge0_api_url>
+```
 
-########## JUDGE0 INTEGRATION ##########
-JUDGE0_API_URL=http://localhost:2358
+### 3. Frontend Setup
+
+```bash
+cd ../client
+npm install
+```
+
+Create a `.env` file in the `frontend` directory with:
+
+```env
+VITE_BACKEND_URL=<YOUR_BACKEND_URL>
+VITE_FRONTEND_URL=<YOUR_FRONTEND_URL>
+```
+
+### 4. Run the Application 🚀
+
+- **Backend (Terminal 1):**
+
+```bash
+cd server
+npm run dev
+```
+
+- **Frontend (Terminal 2):**
+
+```bash
+cd client
+npm run dev
 ```
 
 <!--
-Set up Prisma container using Docker
--------------------------------------
-docker run --name logiqo -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypassword -p 5432:5432 -d postgres
-
-Daily usage:
-------------
-docker start logiqo
-cd ~/Dev/judge0-v1.13.1
-docker-compose up -d
-
 After every change in the Prisma schema:
-----------------------------------------
 npx prisma migrate dev --name shift-to-linux
 npx prisma generate
 npx prisma db push
-
 -->
