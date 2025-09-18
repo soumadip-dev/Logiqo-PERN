@@ -57,4 +57,35 @@ model Problem {
 
   // Relationship with User (problem creator)
   user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  submission         Submission[]                                   // Submissions made for this problem
+  solvedBy           ProblemSolved[]                                // Users who have solved this problem
+  problemPlaylists   ProblemInPlaylist[]                            // Playlists containing this problem
+}
+
+
+// Submission model definition
+model Submission {
+  id            String             @id @default(uuid())          // Unique identifier
+  userId        String                                           // Submitting user's ID
+  problemId     String                                           // Problem being attempted
+  sourceCode    Json                                             // Submitted source code
+  language      String                                           // Language of submission
+  stdin         String?                                          // Optional input for execution
+  stdout        String?                                          // Output of the code
+  stderr        String?                                          // Runtime error (if any)
+  compileOutput String?                                          // Compilation error (if any)
+  status        String                                           // Submission status (e.g., Accepted)
+  memory        String?                                          // Memory usage
+  time          String?                                          // Execution time
+  createdAt     DateTime           @default(now())               // Submission timestamp
+  updatedAt     DateTime           @updatedAt                    // Last update timestamp
+
+  // Relationships to User and Problem
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem       Problem           @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  testCases     TestCaseResult[]                                 // Results of individual test cases
+
+  @@index([status])                                              // Index based on submission status
 }
