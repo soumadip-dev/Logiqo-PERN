@@ -1,29 +1,29 @@
-// Generates the Prisma Client into the specified output folder
+//* Generates the Prisma Client into the specified output folder
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
-// Defines the database source and connection URL
+//* Defines the database source and connection URL
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// Enum for user roles within the application
+//* Enum for user roles within the application
 enum UserRole {
   ADMIN
   USER
 }
 
-// Enum for difficulty level of a problem
+//* Enum for difficulty level of a problem
 enum Difficulty {
   EASY
   MEDIUM
   HARD
 }
 
-// User model definition
+//* User model definition
 model User {
   id              String             @id @default(uuid())     // Unique identifier
   name            String?                                     // Optional user's full name
@@ -37,7 +37,7 @@ model User {
 }
 
 
-// Problem model definition
+//* Problem model definition
 model Problem {
   id                 String              @id @default(uuid())           // Unique identifier
   title              String                                            // Problem title
@@ -64,7 +64,7 @@ model Problem {
 }
 
 
-// Submission model definition
+//* Submission model definition
 model Submission {
   id            String             @id @default(uuid())          // Unique identifier
   userId        String                                           // Submitting user's ID
@@ -90,7 +90,7 @@ model Submission {
   @@index([status])                                              // Index based on submission status
 }
 
-// TestCaseResult model - details result for each test case of a submission
+//* TestCaseResult model - details result for each test case of a submission
 model TestCaseResult {
   id            String             @id @default(uuid())          // Unique identifier
   submissionId  String                                           // Related submission ID
@@ -111,3 +111,16 @@ model TestCaseResult {
   @@index([submissionId])                                        // Index for faster querying by submission ID
 }
 
+//* Model for tracking which users have solved which problems
+model ProblemSolved {
+  id        String             @id @default(uuid())           // Unique identifier
+  userId    String                                           // ID of the user who solved the problem
+  problemId String                                           // ID of the problem that was solved
+  createdAt DateTime           @default(now())               // Timestamp when the problem was marked as solved
+
+  // Relationships to User and Problem
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem   Problem           @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, problemId])                              // Ensure a user cannot solve the same problem multiple times
+}
