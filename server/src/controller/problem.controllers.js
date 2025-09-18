@@ -1,4 +1,8 @@
-import { createProblemService, getAllProblemsService } from '../services/problem.services.js';
+import {
+  createProblemService,
+  getAllProblemsService,
+  getProblemByIdService,
+} from '../services/problem.services.js';
 
 //* Controller to create a new problem
 async function createProblem(req, res) {
@@ -51,7 +55,7 @@ async function createProblem(req, res) {
       referenceSolutions,
       editorial,
       hints,
-      userId: req.user.id,
+      userId: req.user?.id, // Safe access in case user is undefined
     });
 
     // Send successful response
@@ -92,7 +96,47 @@ async function getAllProblems(req, res) {
   }
 }
 
-async function getProblemById(req, res) {}
+//* Controller to get a specific problem by ID
+async function getProblemById(req, res) {
+  try {
+    // Get the problem ID from request parameters
+    const problemId = req.params.id;
+
+    // Validate problem ID
+    if (!problemId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Problem ID is required',
+      });
+    }
+
+    // Call service to fetch the problem by ID
+    const problem = await getProblemByIdService(problemId);
+
+    // If problem is not found
+    if (!problem) {
+      return res.status(404).json({
+        success: false,
+        message: 'Problem not found',
+      });
+    }
+
+    // Send successful response
+    res.status(200).json({
+      success: true,
+      message: 'Problem fetched successfully',
+      problem,
+    });
+  } catch (error) {
+    // Handle errors
+    console.error('Get problem by ID error:', error.message);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong',
+    });
+  }
+}
+
 async function updateProblem(req, res) {}
 async function deleteProblem(req, res) {}
 async function getAllProblemsSolvedByUser(req, res) {}

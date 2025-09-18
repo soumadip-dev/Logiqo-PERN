@@ -1,5 +1,4 @@
 import { db } from '../config/db.config.js';
-import { ENV } from '../config/env.config.js';
 import { getJudge0LanguageId, submissionBatch, pollBatchResults } from '../utils/judge0.utils.js';
 
 //* Service for creating a new problem
@@ -38,7 +37,7 @@ async function createProblemService(data) {
       expected_output: output,
     }));
 
-    // Send all submissions to Judge0, this will return tokens for different test cases
+    // Send all submissions to Judge0 — this returns tokens for test cases
     // Example: [{token: "..."}, {token: "..."}, {token: "..."}]
     const submissionResults = await submissionBatch(submissions);
 
@@ -81,7 +80,7 @@ async function createProblemService(data) {
 
 //* Service for getting all problems
 async function getAllProblemsService() {
-  // Get all problems from database
+  // Get all problems from the database
   const problems = await db.problem.findMany({
     select: {
       id: true,
@@ -91,15 +90,42 @@ async function getAllProblemsService() {
       tags: true,
       createdAt: true,
       updatedAt: true,
-      userId: true,
     },
     orderBy: {
       createdAt: 'desc',
     },
   });
 
-  // If no problem is found, return an empty array
+  // Return an empty array if no problems are found
   return problems || [];
 }
 
-export { createProblemService, getAllProblemsService };
+//* Service for getting a specific problem by ID
+async function getProblemByIdService(problemId) {
+  // Get problem by ID from database
+  const problem = await db.problem.findUnique({
+    where: { id: problemId },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      difficulty: true,
+      tags: true,
+      examples: true,
+      constraints: true,
+      testcases: true,
+      codeSnippets: true,
+      referenceSolutions: true,
+      editorial: true,
+      hints: true,
+      createdAt: true,
+      updatedAt: true,
+      userId: true,
+    },
+  });
+
+  // Return null if no problem is found
+  return problem || null;
+}
+
+export { createProblemService, getAllProblemsService, getProblemByIdService };
