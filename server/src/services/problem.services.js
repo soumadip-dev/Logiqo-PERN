@@ -227,4 +227,41 @@ async function updateProblemService(problemId, data, user) {
   return updatedProblem;
 }
 
-export { createProblemService, getAllProblemsService, getProblemByIdService, updateProblemService };
+//* Service for deleting a problem
+async function deleteProblemService(problemId, user) {
+  // Check if problem ID is provided
+  if (!problemId) {
+    throw new Error('Problem ID is required');
+  }
+
+  // Check if the problem exists in the database
+  const existingProblem = await db.problem.findUnique({
+    where: { id: problemId },
+  });
+
+  // If problem not found, throw an error
+  if (!existingProblem) {
+    throw new Error('Problem not found');
+  }
+
+  // Check if the user is an admin or the problem creator
+  if (user.role !== 'ADMIN' && existingProblem.userId !== user.id) {
+    throw new Error('Forbidden - You are not authorized to delete this problem');
+  }
+
+  // Delete the problem from the database
+  await db.problem.delete({
+    where: { id: problemId },
+  });
+
+  // Return confirmation message
+  return { message: 'Problem deleted successfully' };
+}
+
+export {
+  createProblemService,
+  getAllProblemsService,
+  getProblemByIdService,
+  updateProblemService,
+  deleteProblemService,
+};

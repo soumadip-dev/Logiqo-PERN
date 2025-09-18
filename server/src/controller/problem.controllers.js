@@ -3,6 +3,7 @@ import {
   getAllProblemsService,
   getProblemByIdService,
   updateProblemService,
+  deleteProblemService,
 } from '../services/problem.services.js';
 
 //* Controller to create a new problem
@@ -166,7 +167,37 @@ async function updateProblem(req, res) {
   }
 }
 
-async function deleteProblem(req, res) {}
+//* Controller to delete a problem by ID
+async function deleteProblem(req, res) {
+  try {
+    // Get the problem ID from request parameters
+    const problemId = req.params.id;
+
+    // Validate problem ID
+    if (!problemId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Problem ID is required',
+      });
+    }
+
+    // Call service to delete the problem by ID
+    await deleteProblemService(problemId, req.user);
+
+    // Send successful response
+    res.status(200).json({
+      success: true,
+      message: 'Problem deleted successfully',
+    });
+  } catch (error) {
+    // Handle errors
+    console.error('Delete problem error:', error.message);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong',
+    });
+  }
+}
 
 async function getAllProblemsSolvedByUser(req, res) {}
 
