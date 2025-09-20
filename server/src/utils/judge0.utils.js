@@ -1,3 +1,7 @@
+import axios from 'axios';
+
+import { ENV } from '../config/env.config.js';
+
 //* Get the Judge0 language ID for a given language name
 function getJudge0LanguageId(language) {
   const languageMap = {
@@ -13,5 +17,22 @@ function getJudge0LanguageId(language) {
   return languageMap[language.toUpperCase()];
 }
 
-// Export utility function
-export { getJudge0LanguageId };
+//* Send multiple code submissions to Judge0 and return the response with tokens
+async function submissionBatch(submissions) {
+  const { data } = await axios.post(
+    `${ENV.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`,
+    { submissions },
+    {
+      headers: {
+        'x-rapidapi-key': ENV.RAPIDAPI_KEY,
+        'x-rapidapi-host': ENV.RAPIDAPI_HOST,
+      },
+    }
+  );
+
+  // Return response data from Judge0
+  return data;
+}
+
+//* Export utility functions
+export { getJudge0LanguageId, submissionBatch };
