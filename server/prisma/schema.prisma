@@ -89,3 +89,25 @@ model Submission {
 
   @@index([status])                                              // Index based on submission status
 }
+
+// TestCaseResult model - details result for each test case of a submission
+model TestCaseResult {
+  id            String             @id @default(uuid())          // Unique identifier
+  submissionId  String                                           // Related submission ID
+  testCase      Int                                              // Test case number
+  passed        Boolean                                          // Whether test case passed
+  stdout        String?                                          // Output from code
+  stderr        String?                                          // Error output (if any)
+  expected      String                                           // Expected output
+  compileOutput String?                                          // Compilation errors (if any)
+  status        String                                           // Status (Accepted, Wrong Answer, etc.)
+  memory        String?                                          // Memory used
+  time          String?                                          // Execution time
+  createdAt     DateTime           @default(now())               // Result timestamp
+
+  // Relationship to Submission
+  Submission    Submission         @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([submissionId])                                        // Index for faster querying by submission ID
+}
+
