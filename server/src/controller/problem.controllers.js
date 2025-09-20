@@ -2,6 +2,7 @@ import {
   createProblemService,
   getAllProblemsService,
   getProblemByIdService,
+  updateProblemService,
 } from '../services/problem.services.js';
 
 //* Controller to create a new problem
@@ -137,8 +138,36 @@ async function getProblemById(req, res) {
   }
 }
 
-async function updateProblem(req, res) {}
+//* Controller to update a specific problem by ID
+async function updateProblem(req, res) {
+  try {
+    // Get the problem ID from request parameters
+    const problemId = req.params.id;
+
+    // Get the updated problem data from request body
+    const updatedProblemData = req.body;
+
+    // Call service to update the problem by ID
+    const updatedProblem = await updateProblemService(problemId, updatedProblemData, req.user);
+
+    // Send successful response
+    res.status(200).json({
+      success: true,
+      message: 'Problem updated successfully',
+      problem: updatedProblem,
+    });
+  } catch (error) {
+    // Handle errors
+    console.error('Update problem error:', error.message);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong',
+    });
+  }
+}
+
 async function deleteProblem(req, res) {}
+
 async function getAllProblemsSolvedByUser(req, res) {}
 
 export {

@@ -102,6 +102,11 @@ async function getAllProblemsService() {
 
 //* Service for getting a specific problem by ID
 async function getProblemByIdService(problemId) {
+  // Validate problem ID
+  if (!problemId) {
+    throw new Error('Problem ID is required');
+  }
+
   // Get problem by ID from database
   const problem = await db.problem.findUnique({
     where: { id: problemId },
@@ -128,4 +133,98 @@ async function getProblemByIdService(problemId) {
   return problem || null;
 }
 
-export { createProblemService, getAllProblemsService, getProblemByIdService };
+//* Service for updating an existing problem
+async function updateProblemService(problemId, data, user) {
+  const {
+    title,
+    description,
+    difficulty,
+    tags,
+    examples,
+    constraints,
+    testcases,
+    codeSnippets,
+    referenceSolutions,
+    editorial,
+    hints,
+  } = data;
+
+  // Validate required fields
+  if (
+    !title ||
+    !description ||
+    !difficulty ||
+    !tags ||
+    !examples ||
+    !constraints ||
+    !testcases ||
+    !codeSnippets ||
+    !referenceSolutions ||
+    !editorial ||
+    !hints
+  ) {
+    throw new Error('All fields are required');
+  }
+
+  // Check if problem exists
+  const existingProblem = await db.problem.findUnique({
+    where: { id: problemId },
+  });
+
+  if (!existingProblem) {
+    throw new Error('Problem not found');
+  }
+
+  // Verify authorization (admin or problem owner)
+  if (user.role !== 'ADMIN' && existingProblem.userId !== user.id) {
+    throw new Error('Forbidden - You are not authorized to update this problem');
+  }
+
+  // Validate each reference solution again using Judge0
+  for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
+    const languageId = getJudge0LanguageId(language);
+
+    if (!languageId) {
+      throw new Error(`${language} is not supported by Logiqo at the moment`);
+    }
+
+    const submissions = testcases.map(({ input, output }) => ({
+      source_code: solutionCode,
+      language_id: languageId,
+      stdin: input,
+      expected_output: output,
+    }));
+
+    const submissionResults = await submissionBatch(submissions);
+    const tokens = submissionResults.map(result => result.token);
+    const results = await pollBatchResults(tokens);
+
+    for (let i = 0; i < results.length; i++) {
+      if (results[i].status.id !== 3) {
+        throw new Error(`Test case ${i + 1} did not pass for ${language}`);
+      }
+    }
+  }
+
+  // Update the problem in the database
+  const updatedProblem = await db.problem.update({
+    where: { id: problemId },
+    data: {
+      title,
+      description,
+      difficulty,
+      tags,
+      examples,
+      constraints,
+      testcases,
+      codeSnippets,
+      referenceSolutions,
+      editorial,
+      hints,
+    },
+  });
+
+  return updatedProblem;
+}
+
+export { createProblemService, getAllProblemsService, getProblemByIdService, updateProblemService };
