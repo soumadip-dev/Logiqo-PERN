@@ -10,4 +10,5 @@ export const ENV = {
   JWT_TOKEN_EXPIRY: process.env.JWT_TOKEN_EXPIRY,
   RAPIDAPI_KEY: process.env.RAPIDAPI_KEY,
   RAPIDAPI_HOST: process.env.RAPIDAPI_HOST,
+  JUDGE0_API_URL: process.env.JUDGE0_API_URL,
 };
