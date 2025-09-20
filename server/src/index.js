@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import { ENV } from './config/env.config.js';
 import authRoutes from './routes/auth.routes.js';
 import problemRoutes from './routes/problem.routes.js';
+import executionRoutes from './routes/executeCode.routes.js';
 
 const app = express();
 const PORT = ENV.PORT || 8080;
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 //* API Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/problems', problemRoutes);
+app.use('/api/v1/execute-code', executionRoutes);
 
 app.listen(PORT, () => {
   console.info(`✔️ Server is up and running on port: ${PORT}`);
