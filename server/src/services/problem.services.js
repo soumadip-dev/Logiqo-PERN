@@ -79,4 +79,27 @@ async function createProblemService(data) {
   return newProblem;
 }
 
-export { createProblemService };
+//* Service for getting all problems
+async function getAllProblemsService() {
+  // Get all problems from database
+  const problems = await db.problem.findMany({
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      difficulty: true,
+      tags: true,
+      createdAt: true,
+      updatedAt: true,
+      userId: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  // If no problem is found, return an empty array
+  return problems || [];
+}
+
+export { createProblemService, getAllProblemsService };
