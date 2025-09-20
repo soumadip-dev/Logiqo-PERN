@@ -9,7 +9,7 @@
 </p>
 
 <div align="center">
-  <img src="https://github.com/Aestheticsuraj234/chai-or-leetcode/blob/main/frontend/public/thumbnail.png" alt="Logiqo screenshot" width="800">
+  <img src="./client/ss.png" alt="Logiqo screenshot" width="800">
 </div>
 
 ## 🌟 Features
