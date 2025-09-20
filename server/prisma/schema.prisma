@@ -31,9 +31,13 @@ model User {
   image           String?                                     // Optional profile image URL
   role            UserRole                                    // Role (ADMIN or USER)
   password        String                                      // Hashed password
-  problems        Problem[]                                   // Problems authored by this user
   createdAt       DateTime           @default(now())          // Account creation timestamp
   updatedAt       DateTime           @updatedAt               // Last update timestamp
+  
+  problems        Problem[]                                   // Problems authored by this user
+  Submission      Submission[]                                // Submissions made by this user
+  problemSolved   ProblemSolved[]                             // Problems that the user has solved
+  // playlists       Playlist[]                                  // Playlists created by this user
 }
 
 
@@ -60,7 +64,7 @@ model Problem {
 
   submission         Submission[]                                   // Submissions made for this problem
   solvedBy           ProblemSolved[]                                // Users who have solved this problem
-  problemPlaylists   ProblemInPlaylist[]                            // Playlists containing this problem
+  // problemPlaylists   ProblemInPlaylist[]                            // Playlists containing this problem
 }
 
 
