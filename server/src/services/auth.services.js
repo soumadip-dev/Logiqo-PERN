@@ -26,7 +26,7 @@ async function registerService(userName, userEmail, userPassword) {
   }
 
   // Check if user already exists
-  const existingUser = await db.user.findUnique({
+  const existingUser = await db.User.findUnique({
     where: { email: normalizedEmail },
   });
   if (existingUser) {
@@ -41,7 +41,7 @@ async function registerService(userName, userEmail, userPassword) {
   const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=random&color=ffffff&bold=true&size=128`;
 
   // Create new user in the database
-  const createdUser = await db.user.create({
+  const createdUser = await db.User.create({
     data: {
       name: userName,
       email: normalizedEmail,
@@ -68,7 +68,7 @@ async function loginService(userEmail, userPassword) {
   }
 
   // Find user by email
-  const existingUser = await db.user.findUnique({
+  const existingUser = await db.User.findUnique({
     where: { email: userEmail.toLowerCase() },
   });
 
