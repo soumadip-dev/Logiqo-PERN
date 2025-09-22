@@ -65,3 +65,18 @@ async function getPlaylistDetailsService(playlistId, userId) {
   // Return the playlist
   return playlist;
 }
+
+//* Service to add problems to a playlist
+async function addProblemsToPlaylistService(playlistId, problemIds) {
+  // Check if playlist ID and problem IDs are provided
+  if (!playlistId || !Array.isArray(problemIds) || problemIds.length === 0)
+    throw new Error('Invalid playlist ID or problem IDs');
+
+  // Add problems to the playlist
+  const problemsInPlaylist = await db.ProblemInPlaylist.createMany({
+    data: problemIds.map(problemId => ({ playlistId, problemId })),
+  });
+
+  // Return the added problems
+  return problemsInPlaylist;
+}
