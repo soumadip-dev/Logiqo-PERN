@@ -13,3 +13,17 @@ async function createPlaylistService(userId, name, description) {
   // Return the created playlist
   return playlist;
 }
+
+//* Service to delete a playlist
+async function deletePlaylistService(playlistId) {
+  // Check if playlist ID is provided
+  if (!playlistId) throw new Error('Playlist ID is required');
+
+  // Delete the playlist from the database
+  const deletedPlayList = await db.playlist.delete({
+    where: { id: playlistId },
+  });
+
+  // Return the deleted playlist
+  return deletedPlayList;
+}
