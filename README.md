@@ -98,7 +98,7 @@ npm run dev
 
 <!--
 After every change in the Prisma schema:
-npx prisma migrate dev --name shift-to-linux
 npx prisma generate
+npx prisma migrate dev
 npx prisma db push
 -->
