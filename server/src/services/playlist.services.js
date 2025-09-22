@@ -46,3 +46,22 @@ async function getAllPlaylistsService(userId) {
   // Return the playlists
   return playlists;
 }
+
+//* Service to fetch a specific playlist by ID
+async function getPlaylistDetailsService(playlistId, userId) {
+  // Check if playlist ID and user ID are provided
+  if (!playlistId || !userId) throw new Error('Playlist ID and User ID are required');
+
+  // Fetch the playlist from the database
+  const playlist = await db.Playlist.findUnique({
+    where: { id: playlistId, userId },
+    include: {
+      problems: {
+        include: { problem: true },
+      },
+    },
+  });
+
+  // Return the playlist
+  return playlist;
+}
