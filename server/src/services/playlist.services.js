@@ -80,3 +80,28 @@ async function addProblemsToPlaylistService(playlistId, problemIds) {
   // Return the added problems
   return problemsInPlaylist;
 }
+
+//* Service to remove problems from a playlist
+async function removeProblemsFromPlaylistService(playlistId, problemIds) {
+  // Check if playlist ID and problem IDs are provided
+  if (!playlistId || !Array.isArray(problemIds) || problemIds.length === 0)
+    throw new Error('Invalid playlist ID or problem IDs');
+
+  // Remove problems from the playlist
+  const deletedProblems = await db.ProblemsInPlaylist.deleteMany({
+    where: { playlistId, problemId: { in: problemIds } },
+  });
+
+  // Return the deleted problems
+  return deletedProblems;
+}
+
+//* Export services
+export {
+  createPlaylistService,
+  deletePlaylistService,
+  getAllPlaylistsService,
+  getPlaylistDetailsService,
+  addProblemsToPlaylistService,
+  removeProblemsFromPlaylistService,
+};
