@@ -55,4 +55,36 @@ async function registerService(userName, userEmail, userPassword) {
   return { createdUser, authToken };
 }
 
-export { registerService };
+//* Service to log in a user
+async function loginService(userEmail, userPassword) {
+  // Validate required fields
+  if (!userEmail || !userPassword) {
+    throw new Error('All fields are required');
+  }
+
+  // Find user by email
+  const existingUser = await db.user.findUnique({
+    where: { email: userEmail.toLowerCase() },
+  });
+
+  // Check if user exists
+  if (!existingUser) {
+    throw new Error('Invalid credentials');
+  }
+
+  // Check if password matches
+  const isPasswordCorrect = await bcrypt.compare(userPassword, existingUser.password);
+  if (!isPasswordCorrect) {
+    throw new Error('Invalid credentials');
+  }
+
+  // Generate JWT token
+  const authToken = jwt.sign({ id: existingUser.id }, ENV.JWT_SECRET, {
+    expiresIn: ENV.JWT_TOKEN_EXPIRY,
+  });
+
+  // Return user and token
+  return { existingUser, authToken };
+}
+
+export { registerService, loginService };

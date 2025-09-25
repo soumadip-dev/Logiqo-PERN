@@ -1,7 +1,7 @@
 import { ENV } from '../config/env.config';
-import { registerService } from '../services/auth.services';
+import { registerService, loginService } from '../services/auth.services';
 
-// Controller to handle user registration
+//* Controller to handle user registration
 async function registerUser(req, res) {
   // Extract user details from request body
   const { name, email, password } = req.body;
@@ -40,10 +40,34 @@ async function registerUser(req, res) {
   }
 }
 
-//* Controller for logging in a user
+//* Controller to handle user login
 async function loginUser(req, res) {
-  // Get user credentials from request body
   const { email, password } = req.body;
+  try {
+    const { existingUser, authToken } = await loginService(email, password);
+
+    const cookieOptions = {
+      httpOnly: true,
+      sameSite: ENV.NODE_ENV === 'production' ? 'none' : 'strict',
+      secure: ENV.NODE_ENV === 'production',
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    };
+    res.cookie('authToken', authToken, cookieOptions);
+
+    res.status(200).json({
+      success: true,
+      message: 'User logged in successfully',
+      user: {
+        id: existingUser.id,
+        name: existingUser.name,
+        email: existingUser.email,
+        role: existingUser.role,
+        image: existingUser.image,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message || 'Something went wrong' });
+  }
 }
 
 //* Controller for logout
