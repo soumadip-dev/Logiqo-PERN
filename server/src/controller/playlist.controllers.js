@@ -89,3 +89,28 @@ const getPlaylistDetails = async (req, res) => {
     res.status(500).json({ success: false, error: 'Server Error' });
   }
 };
+
+//* Controller to add problems to playlist
+const addProblemsToPlaylist = async (req, res) => {
+  try {
+    // Get playlist ID from request parameters
+    const { playlistId } = req.params;
+
+    // Get problem IDs from request body
+    const { problemIds } = req.body;
+
+    // Call service to add problems
+    const problemsInPlaylist = await addProblemsToPlaylistService(playlistId, problemIds);
+
+    // Send successful response
+    res.status(201).json({
+      success: true,
+      message: 'Problems added to playlist successfully',
+      problemsInPlaylist,
+    });
+  } catch (error) {
+    // Handle errors
+    console.error('Error in adding problems to playlist:', error.message);
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};
