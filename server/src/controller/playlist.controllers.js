@@ -1,26 +1,29 @@
-//* Controller to create playlist
-async function createPlaylist(req, res) {}
+import {
+  createPlaylistService,
+  deletePlaylistService,
+  getAllPlaylistsService,
+  getPlaylistDetailsService,
+  addProblemsToPlaylistService,
+  removeProblemsFromPlaylistService,
+} from '../services/playlist.services.js';
 
-//* Controller to delete playlist
-async function deletePlaylist(req, res) {}
+//* Controller to create a playlist
+const createPlaylist = async (req, res) => {
+  try {
+    // Extract playlist data from request body
+    const { name, description } = req.body;
 
-//* Controller to get all playlist details
-async function getAllListDetails(req, res) {}
+    // Get user ID from request object
+    const userId = req.user.id;
 
-//* Controller to get playlist details
-async function getPlayListDetails(req, res) {}
+    // Call service to create playlist
+    const playlist = await createPlaylistService(userId, name, description);
 
-//* Controller to add problem to playlist
-async function addProblemToPlaylist(req, res) {}
-
-//* Controller to remove problem from playlist
-async function removeProblemFromPlaylist(req, res) {}
-
-export {
-  getAllListDetails,
-  getPlayListDetails,
-  createPlaylist,
-  addProblemToPlaylist,
-  deletePlaylist,
-  removeProblemFromPlaylist,
+    // Send successful response
+    res.status(200).json({ success: true, message: 'Playlist created successfully', playlist });
+  } catch (error) {
+    // Handle errors
+    console.error('Error in creating playlist:', error.message);
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
 };
