@@ -9,25 +9,25 @@
 </p>
 
 <div align="center">
-  <img src="./client/ss.png" alt="Logiqo screenshot" width="800">
+  <img src="./client/public/ss.png" alt="Logiqo screenshot" width="800">
 </div>
 
 ## 🌟 Features
 
-- 🧠 **Interactive Code Editor** – Built with Monaco Editor for real-time coding and testing.
-- 📖 **Detailed Problem Descriptions** – Comprehensive explanations, examples, constraints, and hints for each challenge.
-- 🧪 **Automated Test Cases** – Validate solutions by running them against predefined tests.
-- 🌍 **Multi-Language Support** – Solve problems using JavaScript, Python, or Java.
-- 📈 **Submission Tracking** – Monitor memory usage, runtime, and status (✅ Accepted, ❌ Wrong Answer, etc.).
-- 📱 **Responsive Design** – Works seamlessly on all devices with a modern UI.
+- **Interactive Code Editor** – Built with Monaco Editor for real-time coding and testing.
+- **Detailed Problem Descriptions** – Comprehensive explanations, examples, constraints, and hints for each challenge.
+- **Automated Test Cases** – Validate solutions by running them against predefined tests.
+- **Multi-Language Support** – Solve problems using JavaScript, Python, or Java.
+- **Submission Tracking** – Monitor memory usage, runtime, and status ( Accepted, Wrong Answer, etc.).
+- **Responsive Design** – Works seamlessly on all devices with a modern UI.
 
 ## ⚙️ Tech Stack
 
-- **🎨 Frontend**: React.js, Tailwind CSS, Monaco Editor, Zustand
-- **🚀 Backend**: Node.js, Express.js
-- **🗄️ Database**: PostgreSQL with Prisma ORM
-- **🔐 Authentication**: JWT (JSON Web Tokens)
-- **🖥️ Code Execution**: Judge0 API
+- **Frontend**: React.js, Tailwind CSS, DaisyUI, Monaco Editor, Zustand, Zod, React Hook Form
+- **Backend**: Node.js, Express.js
+- **Database**: PostgreSQL with Prisma ORM (can use Docker or Neon DB)
+- **Authentication**: JWT (JSON Web Tokens)
+- **Code Execution**: Judge0 API (via RapidAPI)
 
 ## 🛠️ Installation & Setup
 
