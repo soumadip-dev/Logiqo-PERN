@@ -47,3 +47,21 @@ const deletePlaylist = async (req, res) => {
     res.status(500).json({ success: false, error: 'Server Error' });
   }
 };
+
+//* Controller to get all playlists for a user
+const getAllListDetails = async (req, res) => {
+  try {
+    // Get user ID from request object
+    const userId = req.user.id;
+
+    // Call service to get all playlists
+    const playlists = await getAllPlaylistsService(userId);
+
+    // Send successful response
+    res.status(200).json({ success: true, message: 'Playlists fetched successfully', playlists });
+  } catch (error) {
+    // Handle errors
+    console.error('Error in getting all playlist for user:', error.message);
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};
