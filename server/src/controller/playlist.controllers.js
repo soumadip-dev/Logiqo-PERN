@@ -27,3 +27,23 @@ const createPlaylist = async (req, res) => {
     res.status(500).json({ success: false, error: 'Server Error' });
   }
 };
+
+//* Controller to delete a playlist
+const deletePlaylist = async (req, res) => {
+  try {
+    // Get playlist ID from request parameters
+    const { playlistId } = req.params;
+
+    // Call service to delete playlist
+    const deletedPlayList = await deletePlaylistService(playlistId);
+
+    // Send successful response
+    res
+      .status(200)
+      .json({ success: true, message: 'Playlist deleted successfully', deletedPlayList });
+  } catch (error) {
+    // Handle errors
+    console.error('Error in deleting playlist:', error.message);
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};
