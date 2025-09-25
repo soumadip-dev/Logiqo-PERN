@@ -114,3 +114,37 @@ const addProblemsToPlaylist = async (req, res) => {
     res.status(500).json({ success: false, error: 'Server Error' });
   }
 };
+
+//* Controller to remove problems from playlist
+const removeProblemsFromPlaylist = async (req, res) => {
+  try {
+    // Get playlist ID from request parameters
+    const { playlistId } = req.params;
+
+    // Get problem IDs from request body
+    const { problemIds } = req.body;
+
+    // Call service to remove problems
+    const deletedProblems = await removeProblemsFromPlaylistService(playlistId, problemIds);
+
+    // Send successful response
+    res.status(200).json({
+      success: true,
+      message: 'Problem removed from playlist successfully',
+      deletedProblems,
+    });
+  } catch (error) {
+    // Handle errors
+    console.error('Error in removing problems from playlist:', error.message);
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};
+
+export {
+  createPlaylist,
+  deletePlaylist,
+  getAllPlaylists,
+  getPlaylistDetails,
+  addProblemsToPlaylist,
+  removeProblemsFromPlaylist,
+};
