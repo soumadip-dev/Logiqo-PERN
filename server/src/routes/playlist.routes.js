@@ -1,12 +1,12 @@
 import { Router } from 'express';
 
 import {
-  addProblemToPlaylist,
   createPlaylist,
   deletePlaylist,
-  getAllListDetails,
-  getPlayListDetails,
-  removeProblemFromPlaylist,
+  getAllPlaylists,
+  getPlaylistDetails,
+  addProblemsToPlaylist,
+  removeProblemsFromPlaylist,
 } from '../controller/playlist.controllers.js';
 import { authMiddleware } from '../middleware/auth.middlewares.js';
 
@@ -14,12 +14,12 @@ import { authMiddleware } from '../middleware/auth.middlewares.js';
 const router = Router();
 
 //* Define routes
-router.get('/', authMiddleware, getAllListDetails);
-router.get('/:playlistId', authMiddleware, getPlayListDetails);
+router.get('/', authMiddleware, getAllPlaylists);
+router.get('/:playlistId', authMiddleware, getPlaylistDetails);
 router.post('/create-playlist', authMiddleware, createPlaylist);
-router.post('/:playlistId/add-problem', authMiddleware, addProblemToPlaylist);
+router.post('/:playlistId/add-problem', authMiddleware, addProblemsToPlaylist);
 router.delete('/:playlistId', authMiddleware, deletePlaylist);
-router.delete('/:playlistId/remove-problem', authMiddleware, removeProblemFromPlaylist);
+router.delete('/:playlistId/remove-problem', authMiddleware, removeProblemsFromPlaylist);
 
 //* Export the router
 export default router;
