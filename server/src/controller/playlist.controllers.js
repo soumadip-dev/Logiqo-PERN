@@ -49,7 +49,7 @@ const deletePlaylist = async (req, res) => {
 };
 
 //* Controller to get all playlists for a user
-const getAllListDetails = async (req, res) => {
+const getAllPlaylists = async (req, res) => {
   try {
     // Get user ID from request object
     const userId = req.user.id;
@@ -62,6 +62,30 @@ const getAllListDetails = async (req, res) => {
   } catch (error) {
     // Handle errors
     console.error('Error in getting all playlist for user:', error.message);
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};
+
+//* Controller to get playlist details
+const getPlaylistDetails = async (req, res) => {
+  try {
+    // Get playlist ID from request parameters
+    const { playlistId } = req.params;
+
+    // Get user ID from request object added by auth middleware
+    const userId = req.user.id;
+
+    // Call service to get playlist
+    const playlist = await getPlaylistDetailsService(playlistId, userId);
+
+    // Check if playlist is found or not
+    if (!playlist) return res.status(404).json({ success: false, error: 'Playlist not found' });
+
+    // Send successful response
+    res.status(200).json({ success: true, message: 'Playlist fetched successfully', playlist });
+  } catch (error) {
+    // Handle errors
+    console.error('Error in getting playlist details:', error.message);
     res.status(500).json({ success: false, error: 'Server Error' });
   }
 };
