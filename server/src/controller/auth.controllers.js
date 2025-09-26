@@ -1,5 +1,5 @@
-import { ENV } from '../config/env.config';
-import { registerService, loginService } from '../services/auth.services';
+import { ENV } from '../config/env.config.js';
+import { registerService, loginService } from '../services/auth.services.js';
 
 //* Controller to handle user registration
 async function registerUser(req, res) {
@@ -71,7 +71,22 @@ async function loginUser(req, res) {
 }
 
 //* Controller for logout
-async function logoutUser(req, res) {}
+async function logoutUser(req, res) {
+  try {
+    // Clear the 'authToken' cookie
+    res.clearCookie('authToken', {
+      httpOnly: true,
+      sameSite: ENV.NODE_ENV === 'production' ? 'none' : 'strict',
+      secure: ENV.NODE_ENV === 'production',
+    });
+
+    // Send a success response
+    res.status(200).json({ success: true, message: 'User logged out successfully' });
+  } catch (error) {
+    // Handle errors
+    res.status(400).json({ success: false, message: error.message || 'Something went wrong' });
+  }
+}
 
 //* Controller for getting user profile
 async function userProfile(req, res) {}

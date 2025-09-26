@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { ENV } from './config/env.config.js';
 import morgan from 'morgan';
+import authRoutes from './routes/auth.routes.js';
 
 const app = express();
 const PORT = ENV.PORT || 8080;
@@ -25,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 //* API Routes
-// app.use('/api/vi/auth', authRoutes);
+app.use('/api/vi/auth', authRoutes);
 
 app.listen(PORT, () => {
   console.info(`✔️ Server is up and running on port: ${PORT}`);

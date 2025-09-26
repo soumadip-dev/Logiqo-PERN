@@ -1,6 +1,6 @@
-import { db } from '../config/db.config';
-import { ENV } from '../config/env.config';
-import { isStrongPassword, isValidEmail } from '../utils/validation.utils';
+import { db } from '../config/db.config.js';
+import { ENV } from '../config/env.config.js';
+import { isStrongPassword, isValidEmail } from '../utils/validation.utils.js';
 import bcrypt from 'bcryptjs';
 import { UserRole } from '../generated/prisma/index.js';
 import jwt from 'jsonwebtoken';
