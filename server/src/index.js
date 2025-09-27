@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 //* API Routes
-app.use('/api/vi/auth', authRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 app.listen(PORT, () => {
   console.info(`✔️ Server is up and running on port: ${PORT}`);

@@ -36,6 +36,10 @@ async function registerService(userName, userEmail, userPassword) {
   // Hash the password
   const hashedPassword = await bcrypt.hash(userPassword, 10);
 
+  // Generate random avatar URL based on username
+
+  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=random&color=ffffff&bold=true&size=128`;
+
   // Create new user in the database
   const createdUser = await db.user.create({
     data: {
@@ -43,6 +47,7 @@ async function registerService(userName, userEmail, userPassword) {
       email: normalizedEmail,
       password: hashedPassword,
       role: UserRole.USER,
+      image: avatarUrl,
     },
   });
 
