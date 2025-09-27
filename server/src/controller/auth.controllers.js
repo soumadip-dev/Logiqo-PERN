@@ -88,7 +88,22 @@ async function logoutUser(req, res) {
   }
 }
 
-//* Controller for getting user profile
-async function userProfile(req, res) {}
+//* Controller to fetch authenticated user profile
+async function checkAuth(req, res) {
+  try {
+    // Return user details from request object
+    res.status(200).json({
+      success: true,
+      message: 'User profile fetched successfully',
+      user: req.user,
+    });
+  } catch (error) {
+    console.error('Get user profile error:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+    });
+  }
+}
 
-export { registerUser, loginUser, logoutUser, userProfile };
+export { registerUser, loginUser, logoutUser, checkAuth };
