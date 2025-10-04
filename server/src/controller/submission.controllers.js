@@ -1,7 +1,7 @@
 import {
   getUserSubmissionsService,
   getUserSubmissionsForProblemService,
-  getProblemSubmissionCounService,
+  getProblemSubmissionCountService,
 } from '../services/submission.services.js';
 
 //* Controller to get all submissions for a user
@@ -48,6 +48,26 @@ async function getUserSubmissionsForProblem(req, res) {
 }
 
 //* Controller to get total submissions count for a problem
-async function getProblemSubmissionCount(req, res) {}
+async function getProblemSubmissionCount(req, res) {
+  try {
+    // Get problem ID from request parameters
+    const problemId = req.params.problemId;
 
+    // Get submission count from service
+    const submissionCount = await getProblemSubmissionCountService(problemId);
+
+    res.status(200).json({
+      success: true,
+      message: 'Submission count fetched successfully',
+      submission: submissionCount,
+    });
+  } catch (error) {
+    console.error('Server error', error.message);
+    res
+      .status(500)
+      .json({ success: false, error: error.message || 'Failed to fetch submission count' });
+  }
+}
+
+//* Export controllers
 export { getUserSubmissions, getUserSubmissionsForProblem, getProblemSubmissionCount };

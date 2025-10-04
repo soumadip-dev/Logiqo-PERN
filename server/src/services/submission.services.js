@@ -33,7 +33,7 @@ async function getUserSubmissionsForProblemService(userId, problemId) {
 }
 
 //* Service to count all submissions for a specific problem
-async function getProblemSubmissionCounService(problemId) {
+async function getProblemSubmissionCountService(problemId) {
   // Check if problem ID is provided
   if (!problemId) {
     throw new Error('Problem ID is required');
@@ -52,5 +52,5 @@ async function getProblemSubmissionCounService(problemId) {
 export {
   getUserSubmissionsService,
   getUserSubmissionsForProblemService,
-  getProblemSubmissionCounService,
+  getProblemSubmissionCountService,
 };
