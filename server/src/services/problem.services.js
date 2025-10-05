@@ -58,7 +58,7 @@ async function createProblemService(data) {
   }
 
   // Create a new problem in the database
-  const newProblem = await db.problem.create({
+  const newProblem = await db.Problem.create({
     data: {
       title,
       description,
@@ -81,7 +81,7 @@ async function createProblemService(data) {
 //* Service for getting all problems
 async function getAllProblemsService() {
   // Get all problems from the database
-  const problems = await db.problem.findMany({
+  const problems = await db.Problem.findMany({
     select: {
       id: true,
       title: true,
@@ -108,7 +108,7 @@ async function getProblemByIdService(problemId) {
   }
 
   // Get problem by ID from database
-  const problem = await db.problem.findUnique({
+  const problem = await db.Problem.findUnique({
     where: { id: problemId },
     select: {
       id: true,
@@ -167,7 +167,7 @@ async function updateProblemService(problemId, data, user) {
   }
 
   // Check if problem exists
-  const existingProblem = await db.problem.findUnique({
+  const existingProblem = await db.Problem.findUnique({
     where: { id: problemId },
   });
 
@@ -207,7 +207,7 @@ async function updateProblemService(problemId, data, user) {
   }
 
   // Update the problem in the database
-  const updatedProblem = await db.problem.update({
+  const updatedProblem = await db.Problem.update({
     where: { id: problemId },
     data: {
       title,
@@ -235,7 +235,7 @@ async function deleteProblemService(problemId, user) {
   }
 
   // Check if the problem exists in the database
-  const existingProblem = await db.problem.findUnique({
+  const existingProblem = await db.Problem.findUnique({
     where: { id: problemId },
   });
 
@@ -250,7 +250,7 @@ async function deleteProblemService(problemId, user) {
   }
 
   // Delete the problem from the database
-  await db.problem.delete({
+  await db.Problem.delete({
     where: { id: problemId },
   });
 
@@ -258,10 +258,41 @@ async function deleteProblemService(problemId, user) {
   return { message: 'Problem deleted successfully' };
 }
 
+//* Service for getting all problems solved by a user
+async function getAllProblemsSolvedByUserService(userId) {
+  // Check if user ID is provided
+  if (!userId) {
+    throw new Error('User ID is required');
+  }
+
+  // Fetch all problems solved by the user from the database
+  const problems = await db.Problem.findMany({
+    where: {
+      solvedBy: {
+        some: {
+          userId: userId,
+        },
+      },
+    },
+    include: {
+      solvedBy: {
+        where: {
+          userId: userId,
+        },
+      },
+    },
+  });
+
+  // Return the problems
+  return problems;
+}
+
+//* Export services
 export {
   createProblemService,
   getAllProblemsService,
   getProblemByIdService,
   updateProblemService,
   deleteProblemService,
+  getAllProblemsSolvedByUserService,
 };
