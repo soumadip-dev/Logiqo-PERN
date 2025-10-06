@@ -29,7 +29,7 @@ async function executeCode(req, res) {
     res.status(200).json({
       success: true,
       message: 'Code executed successfully',
-      // submission: result,
+      submission: result,
     });
   } catch (error) {
     console.error('Error in executeCode controller', error.message);
