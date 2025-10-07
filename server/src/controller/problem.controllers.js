@@ -4,6 +4,7 @@ import {
   getProblemByIdService,
   updateProblemService,
   deleteProblemService,
+  getAllProblemsSolvedByUserService,
 } from '../services/problem.services.js';
 
 //* Controller to create a new problem
@@ -199,7 +200,30 @@ async function deleteProblem(req, res) {
   }
 }
 
-async function getAllProblemsSolvedByUser(req, res) {}
+//* Controller to get all problems solved by a user
+async function getAllProblemsSolvedByUser(req, res) {
+  try {
+    // Get user ID from request object added by auth middleware
+    const userId = req.user.id;
+
+    // Call service to fetch all problems solved by the user
+    const problems = await getAllProblemsSolvedByUserService(userId);
+
+    // Send successful response
+    res.status(200).json({
+      success: true,
+      message: 'All problems solved by user fetched successfully',
+      problems,
+    });
+  } catch (error) {
+    // Handle errors
+    console.error('Get all problems solved by user error:', error.message);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong',
+    });
+  }
+}
 
 export {
   createProblem,
