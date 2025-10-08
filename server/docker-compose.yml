@@ -1,11 +1,11 @@
 services:
-  postgres:
+  db:
     image: postgres:latest
     container_name: Logiqo_db
     environment:
-      - POSTGRES_DB=logiqo
-      - POSTGRES_USER=logiqo
-      - POSTGRES_PASSWORD=logiqo
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     ports:
       - '5432:5432'
     restart: unless-stopped
