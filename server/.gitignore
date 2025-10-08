@@ -1,3 +1,4 @@
 node_modules
 .env
 commit.txt
+/src/generated/prisma
