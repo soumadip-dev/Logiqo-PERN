@@ -4,7 +4,7 @@
   "description": "Backend for a modern coding platform for mastering data structures and algorithms through interactive challenges and real-time feedback.",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
+    "dev": "docker-compose up -d && nodemon src/index.js",
     "start": "node src/index.js"
   },
   "keywords": [
