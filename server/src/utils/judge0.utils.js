@@ -36,8 +36,12 @@ async function submissionBatch(submissions) {
 //* Poll Judge0 until all submissions are completed
 async function pollBatchResults(tokens) {
   while (true) {
-    const { data } = await axios.get(`${ENV.JUDGE0_API_URL}/submissions/batch/`, {
+    const { data } = await axios.get(`${ENV.JUDGE0_API_URL}/submissions/batch`, {
       params: { tokens: tokens.join(','), base64_encoded: false },
+      headers: {
+        'x-rapidapi-key': ENV.RAPIDAPI_KEY,
+        'x-rapidapi-host': ENV.RAPIDAPI_HOST,
+      },
     });
 
     const results = data.submissions;
