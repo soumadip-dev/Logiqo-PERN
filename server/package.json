@@ -4,7 +4,7 @@
   "description": "Backend for a modern coding platform for mastering data structures and algorithms through interactive challenges and real-time feedback.",
   "main": "src/index.js",
   "scripts": {
-    "dev": "docker-compose up -d && nodemon src/index.js",
+    "dev": "nodemon src/index.js",
     "start": "node src/index.js"
   },
   "keywords": [
@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.17.0",
+    "axios": "^1.12.2",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

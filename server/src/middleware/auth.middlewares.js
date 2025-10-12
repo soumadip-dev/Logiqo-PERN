@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+
 import { db } from '../config/db.config.js';
 import { ENV } from '../config/env.config.js';
 
@@ -45,4 +46,34 @@ async function authMiddleware(req, res, next) {
   }
 }
 
-export { authMiddleware };
+//* Middleware to check if user has admin privileges
+async function checkAdmin(req, res, next) {
+  try {
+    // Get user ID from request object
+    const userId = req.user?.id;
+
+    // Return 401 if user ID is missing
+    if (!userId) {
+      return res.status(401).json({ success: false, message: 'Unauthorized, user not found' });
+    }
+
+    // Find user role in database
+    const existingUser = await db.user.findUnique({
+      where: { id: userId },
+      select: { role: true },
+    });
+
+    // Return 403 if user is not an admin
+    if (!existingUser || existingUser.role !== 'ADMIN') {
+      return res.status(403).json({ success: false, message: 'Forbidden, admin access required' });
+    }
+
+    // Proceed to next middleware or route handler
+    next();
+  } catch (error) {
+    console.error('Check admin middleware error:', error.message);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+}
+
+export { authMiddleware, checkAdmin };

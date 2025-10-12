@@ -16,14 +16,45 @@ enum UserRole {
   USER
 }
 
+// Enum for difficulty level of a problem
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
 // User model definition
 model User {
   id              String             @id @default(uuid())     // Unique identifier
-  name            String?                                      // Optional user's full name
+  name            String?                                     // Optional user's full name
   email           String             @unique                  // Unique email address
-  image           String?                                      // Optional profile image URL
-  role            UserRole                                     // Role (ADMIN or USER)
+  image           String?                                     // Optional profile image URL
+  role            UserRole                                    // Role (ADMIN or USER)
   password        String                                      // Hashed password
+  problems        Problem[]                                   // Problems authored by this user
   createdAt       DateTime           @default(now())          // Account creation timestamp
   updatedAt       DateTime           @updatedAt               // Last update timestamp
+}
+
+
+// Problem model definition
+model Problem {
+  id                 String              @id @default(uuid())           // Unique identifier
+  title              String                                            // Problem title
+  description        String                                            // Problem description
+  difficulty         Difficulty                                        // Difficulty level
+  tags               String[]                                          // Tags for filtering
+  examples           Json                                              // Example inputs/outputs
+  constraints        String                                            // Problem constraints
+  hints              String?                                           // Optional hints
+  editorial          String?                                           // Optional editorial explanation
+  testcases          Json                                              // Input/output pairs for testing
+  codeSnippets       Json                                              // Starter code snippets
+  referenceSolutions Json                                              // Correct solutions in various languages
+  createdAt          DateTime           @default(now())               // Creation timestamp
+  updatedAt          DateTime           @updatedAt                    // Last update timestamp
+  userId             String                                            // Reference to the author (User)
+
+  // Relationship with User (problem creator)
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
