@@ -62,5 +62,19 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+//* Function to get language name from language ID
+function getJudge0LanguageName(languageId) {
+  const languageMap = {
+    71: 'PYTHON',
+    62: 'JAVA',
+    63: 'JAVASCRIPT',
+    105: 'CPP',
+    60: 'GO',
+    51: 'CSHARP',
+  };
+
+  return languageMap[languageId] || 'Unknown';
+}
+
 //* Export utility functions
-export { getJudge0LanguageId, submissionBatch, pollBatchResults };
+export { getJudge0LanguageId, submissionBatch, pollBatchResults, getJudge0LanguageName };

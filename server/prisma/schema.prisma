@@ -1,29 +1,29 @@
-// Generates the Prisma Client into the specified output folder
+//* Generates the Prisma Client into the specified output folder
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
-// Defines the database source and connection URL
+//* Defines the database source and connection URL
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// Enum for user roles within the application
+//* Enum for user roles within the application
 enum UserRole {
   ADMIN
   USER
 }
 
-// Enum for difficulty level of a problem
+//* Enum for difficulty level of a problem
 enum Difficulty {
   EASY
   MEDIUM
   HARD
 }
 
-// User model definition
+//* User model definition
 model User {
   id              String             @id @default(uuid())     // Unique identifier
   name            String?                                     // Optional user's full name
@@ -31,13 +31,17 @@ model User {
   image           String?                                     // Optional profile image URL
   role            UserRole                                    // Role (ADMIN or USER)
   password        String                                      // Hashed password
-  problems        Problem[]                                   // Problems authored by this user
   createdAt       DateTime           @default(now())          // Account creation timestamp
   updatedAt       DateTime           @updatedAt               // Last update timestamp
+  
+  problems        Problem[]                                   // Problems authored by this user
+  Submission      Submission[]                                // Submissions made by this user
+  problemSolved   ProblemSolved[]                             // Problems that the user has solved
+  // playlists       Playlist[]                                  // Playlists created by this user
 }
 
 
-// Problem model definition
+//* Problem model definition
 model Problem {
   id                 String              @id @default(uuid())           // Unique identifier
   title              String                                            // Problem title
@@ -57,4 +61,70 @@ model Problem {
 
   // Relationship with User (problem creator)
   user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  submission         Submission[]                                   // Submissions made for this problem
+  solvedBy           ProblemSolved[]                                // Users who have solved this problem
+  // problemPlaylists   ProblemInPlaylist[]                            // Playlists containing this problem
+}
+
+
+//* Submission model definition
+model Submission {
+  id            String             @id @default(uuid())          // Unique identifier
+  userId        String                                           // Submitting user's ID
+  problemId     String                                           // Problem being attempted
+  sourceCode    Json                                             // Submitted source code
+  language      String                                           // Language of submission
+  stdin         String?                                          // Optional input for execution
+  stdout        String?                                          // Output of the code
+  stderr        String?                                          // Runtime error (if any)
+  compileOutput String?                                          // Compilation error (if any)
+  status        String                                           // Submission status (e.g., Accepted)
+  memory        String?                                          // Memory usage
+  time          String?                                          // Execution time
+  createdAt     DateTime           @default(now())               // Submission timestamp
+  updatedAt     DateTime           @updatedAt                    // Last update timestamp
+
+  // Relationships to User and Problem
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem       Problem           @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  testCases     TestCaseResult[]                                 // Results of individual test cases
+
+  @@index([status])                                              // Index based on submission status
+}
+
+//* TestCaseResult model - details result for each test case of a submission
+model TestCaseResult {
+  id            String             @id @default(uuid())          // Unique identifier
+  submissionId  String                                           // Related submission ID
+  testCase      Int                                              // Test case number
+  passed        Boolean                                          // Whether test case passed
+  stdout        String?                                          // Output from code
+  stderr        String?                                          // Error output (if any)
+  expected      String                                           // Expected output
+  compileOutput String?                                          // Compilation errors (if any)
+  status        String                                           // Status (Accepted, Wrong Answer, etc.)
+  memory        String?                                          // Memory used
+  time          String?                                          // Execution time
+  createdAt     DateTime           @default(now())               // Result timestamp
+
+  // Relationship to Submission
+  Submission    Submission         @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([submissionId])                                        // Index for faster querying by submission ID
+}
+
+//* Model for tracking which users have solved which problems
+model ProblemSolved {
+  id        String             @id @default(uuid())           // Unique identifier
+  userId    String                                           // ID of the user who solved the problem
+  problemId String                                           // ID of the problem that was solved
+  createdAt DateTime           @default(now())               // Timestamp when the problem was marked as solved
+
+  // Relationships to User and Problem
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem   Problem           @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, problemId])                              // Ensure a user cannot solve the same problem multiple times
 }
