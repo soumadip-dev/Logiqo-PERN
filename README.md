@@ -80,7 +80,7 @@ VITE_BACKEND_URL=<YOUR_BACKEND_URL>
 VITE_FRONTEND_URL=<YOUR_FRONTEND_URL>
 ```
 
-### 4. Run the Application 🚀
+### 4. Run the Application
 
 - **Backend (Terminal 1):**
 
