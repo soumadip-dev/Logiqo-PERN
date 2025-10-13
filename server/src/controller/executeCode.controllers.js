@@ -1,5 +1,7 @@
 import { executeCodeService } from '../services/executeCode.services.js';
-async function executeCode(req, res) {
+
+//* Controller to handle code execution submissions
+async function handleCodeExecution(req, res) {
   // Get data from body
   const { source_code, language_id, stdin, expected_outputs, problemId } = req.body;
 
@@ -40,4 +42,4 @@ async function executeCode(req, res) {
   }
 }
 
-export { executeCode };
+export { handleCodeExecution };
