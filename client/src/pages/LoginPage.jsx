@@ -2,21 +2,37 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight, Eye, EyeOff, Sparkles, Github, Chrome } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+// Zod validation schema
+const loginSchema = z.object({
+  email: z.string().min(1, 'Email is required').email('Enter a valid email address'),
+  password: z
+    .string()
+    .min(1, 'Password is required')
+    .min(6, 'Password must be at least 6 characters'),
+});
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setIsLoading(true);
-    // Simulate login
-    setTimeout(() => {
-      setIsLoading(false);
-      window.location.href = '/home';
-    }, 1500);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    mode: 'onChange',
+  });
+
+  const onSubmit = async data => {
+    console.log('Login data:', data);
+    // Simulate login API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Handle successful login
+    // window.location.href = '/home';
   };
 
   const handleSocialLogin = provider => {
@@ -87,7 +103,7 @@ const LoginPage = () => {
           </div>
 
           {/* Login Form */}
-          <div className="space-y-5">
+          <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
@@ -96,14 +112,25 @@ const LoginPage = () => {
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
+                  {...register('email')}
                   type="email"
                   id="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  className="w-full bg-slate-700/50 border border-slate-600/50 rounded-xl py-3 pl-12 pr-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all"
+                  className={`w-full bg-slate-700/50 border rounded-xl py-3 pl-12 pr-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all ${
+                    errors.email ? 'border-red-500/50' : 'border-slate-600/50'
+                  }`}
                   placeholder="you@example.com"
                 />
               </div>
+              {errors.email && (
+                <motion.span
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-400 text-sm mt-2 flex items-center space-x-1"
+                >
+                  <span>•</span>
+                  <span>{errors.email.message}</span>
+                </motion.span>
+              )}
             </div>
 
             {/* Password Field */}
@@ -114,11 +141,12 @@ const LoginPage = () => {
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
+                  {...register('password')}
                   type={showPassword ? 'text' : 'password'}
                   id="password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  className="w-full bg-slate-700/50 border border-slate-600/50 rounded-xl py-3 pl-12 pr-12 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all"
+                  className={`w-full bg-slate-700/50 border rounded-xl py-3 pl-12 pr-12 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all ${
+                    errors.password ? 'border-red-500/50' : 'border-slate-600/50'
+                  }`}
                   placeholder="••••••••"
                 />
                 <button
@@ -129,12 +157,22 @@ const LoginPage = () => {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              {errors.password && (
+                <motion.span
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-400 text-sm mt-2 flex items-center space-x-1"
+                >
+                  <span>•</span>
+                  <span>{errors.password.message}</span>
+                </motion.span>
+              )}
             </div>
 
             {/* Forgot Password */}
             <div className="flex justify-end text-sm">
               <Link
-                to=""
+                to="/forgot-password"
                 className="text-violet-400 hover:text-violet-300 transition-colors font-medium"
               >
                 Forgot password?
@@ -143,14 +181,13 @@ const LoginPage = () => {
 
             {/* Submit Button */}
             <motion.button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isLoading}
+              type="submit"
+              disabled={isSubmitting}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="w-full bg-gradient-to-r from-violet-500 via-purple-500 to-blue-500 text-white py-3.5 rounded-xl font-semibold flex items-center justify-center space-x-2 shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? (
+              {isSubmitting ? (
                 <>
                   <motion.div
                     animate={{ rotate: 360 }}
@@ -166,7 +203,7 @@ const LoginPage = () => {
                 </>
               )}
             </motion.button>
-          </div>
+          </form>
 
           {/* Sign Up Link */}
           <div className="mt-6 text-center">
@@ -190,11 +227,11 @@ const LoginPage = () => {
           className="text-center text-slate-500 text-sm mt-6"
         >
           By signing in, you agree to our{' '}
-          <Link to="" className="text-slate-400 hover:text-slate-300 transition-colors">
+          <Link to="/terms" className="text-slate-400 hover:text-slate-300 transition-colors">
             Terms
           </Link>{' '}
           and{' '}
-          <Link to="" className="text-slate-400 hover:text-slate-300 transition-colors">
+          <Link to="/privacy" className="text-slate-400 hover:text-slate-300 transition-colors">
             Privacy Policy
           </Link>
         </motion.p>
