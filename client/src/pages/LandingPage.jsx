@@ -1,4 +1,4 @@
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
   Rocket,
@@ -18,9 +18,10 @@ import {
   Code2,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import useAuthStore from '../store/useAuthStore';
 
 const LandingPage = () => {
-  const [isAuthenticated] = useState(false);
+  const { authUser } = useAuthStore();
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
@@ -28,7 +29,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    if (isAuthenticated) {
+    if (authUser) {
       navigate('/home');
     } else {
       navigate('/login');
@@ -145,7 +146,6 @@ const LandingPage = () => {
           }}
         />
       </div>
-
       {/* Animated Gradient Orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -175,7 +175,6 @@ const LandingPage = () => {
           className="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
         />
       </div>
-
       {/* Header */}
       <motion.header
         initial={{ y: -100, opacity: 0 }}
@@ -205,16 +204,21 @@ const LandingPage = () => {
               Logiqo
             </span>
           </motion.div>
-
-          <div className="flex items-center space-x-3">
+          
+          {authUser ? (
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => navigate('/login')}
-              className="px-5 py-2 rounded-full text-slate-300 hover:text-white transition-all text-sm font-medium"
+              onClick={handleGetStarted}
+              className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-violet-500/50 hover:ring-violet-400 transition-all shadow-lg shadow-violet-500/25"
             >
-              Sign In
+              <img
+                src={authUser.image}
+                alt={authUser.name || 'Profile'}
+                className="w-full h-full object-cover"
+              />
             </motion.button>
+          ) : (
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -223,10 +227,9 @@ const LandingPage = () => {
             >
               Get Started
             </motion.button>
-          </div>
+          )}
         </div>
       </motion.header>
-
       {/* Hero Section */}
       <motion.section
         style={{ opacity, scale }}
@@ -324,7 +327,6 @@ const LandingPage = () => {
           </motion.div>
         </motion.div>
       </motion.section>
-
       {/* Features Section */}
       <motion.section
         id="features"
@@ -389,7 +391,6 @@ const LandingPage = () => {
           ))}
         </motion.div>
       </motion.section>
-
       {/* Benefits Section */}
       <motion.section
         initial={{ opacity: 0 }}
@@ -487,7 +488,6 @@ const LandingPage = () => {
           </motion.div>
         </div>
       </motion.section>
-
       {/* Testimonials */}
       <motion.section
         initial={{ opacity: 0 }}
@@ -532,7 +532,6 @@ const LandingPage = () => {
           ))}
         </div>
       </motion.section>
-
       {/* Footer */}
       <footer className="relative z-10 border-t border-slate-800/50 mt-20 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 py-12">

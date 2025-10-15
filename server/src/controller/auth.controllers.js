@@ -12,10 +12,11 @@ async function registerUser(req, res) {
 
     // Set JWT token in HTTP-only cookie
     const cookieOptions = {
-      httpOnly: true,
-      sameSite: ENV.NODE_ENV === 'production' ? 'none' : 'strict',
-      secure: ENV.NODE_ENV === 'production',
+      httpOnly: true, // can't access from JS
+      secure: false, // works over HTTP
+      sameSite: 'none', // allow cross-site requests
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      path: '/',
     };
     res.cookie('authToken', authToken, cookieOptions);
 
@@ -51,6 +52,7 @@ async function loginUser(req, res) {
       sameSite: ENV.NODE_ENV === 'production' ? 'none' : 'strict',
       secure: ENV.NODE_ENV === 'production',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      path: '/',
     };
     res.cookie('authToken', authToken, cookieOptions);
 
