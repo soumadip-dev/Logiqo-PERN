@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useAuthStore } from '../store/useAuthStore';
 
 // Zod validation schema
 const loginSchema = z.object({
@@ -24,11 +25,11 @@ const loginSchema = z.object({
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-
+  const { login, isLoggingIn } = useAuthStore();
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
     mode: 'onChange',
@@ -36,8 +37,8 @@ const LoginPage = () => {
 
   const onSubmit = async data => {
     try {
+      await login(data);
       console.log('Form data:', data);
-      // Use the signIn function from the store (changed from signUp to signIn for login)
     } catch (error) {
       console.error('Error signing in:', error);
     }
@@ -289,11 +290,11 @@ const LoginPage = () => {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                disabled={isSubmitting}
+                disabled={isLoggingIn}
                 type="submit"
                 className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 group"
               >
-                {isSubmitting ? (
+                {isLoggingIn ? (
                   <>
                     <motion.div
                       animate={{ rotate: 360 }}
