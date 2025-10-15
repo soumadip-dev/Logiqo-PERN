@@ -2,22 +2,49 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight, Eye, EyeOff, Sparkles, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+// Zod validation schema
+const signUpSchema = z.object({
+  name: z
+    .string()
+    .min(1, 'Name is required')
+    .min(3, 'Name must be at least 3 characters')
+    .regex(/^[A-Za-z\s]+$/, 'Name should contain only letters and spaces'),
+  email: z.string().min(1, 'Email is required').email('Enter a valid email address'),
+  password: z
+    .string()
+    .min(1, 'Password is required')
+    .min(6, 'Password must be at least 6 characters')
+    .regex(/^(?=.*[a-z])/, 'Password must contain at least one lowercase letter')
+    .regex(/^(?=.*[A-Z])/, 'Password must contain at least one uppercase letter')
+    .regex(/^(?=.*\d)/, 'Password must contain at least one number')
+    .regex(
+      /^(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/,
+      'Password must contain at least one special character'
+    ),
+});
 
 const SignUpPage = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setIsLoading(true);
-    // Simulate signup
-    setTimeout(() => {
-      setIsLoading(false);
-      window.location.href = '/home';
-    }, 1500);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(signUpSchema),
+    mode: 'onChange', // or 'onBlur' for better performance
+  });
+
+  const onSubmit = async data => {
+    console.log('Form data:', data);
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Handle successful signup
+    // window.location.href = '/home';
   };
 
   return (
@@ -84,7 +111,7 @@ const SignUpPage = () => {
           </div>
 
           {/* Sign Up Form */}
-          <div className="space-y-5">
+          <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
             {/* Name Field */}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
@@ -93,14 +120,25 @@ const SignUpPage = () => {
               <div className="relative">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
+                  {...register('name')}
                   type="text"
                   id="name"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  className="w-full bg-slate-700/50 border border-slate-600/50 rounded-xl py-3 pl-12 pr-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all"
+                  className={`w-full bg-slate-700/50 border rounded-xl py-3 pl-12 pr-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all ${
+                    errors.name ? 'border-red-500/50' : 'border-slate-600/50'
+                  }`}
                   placeholder="John Doe"
                 />
               </div>
+              {errors.name && (
+                <motion.span
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-400 text-sm mt-2 flex items-center space-x-1"
+                >
+                  <span>•</span>
+                  <span>{errors.name.message}</span>
+                </motion.span>
+              )}
             </div>
 
             {/* Email Field */}
@@ -111,14 +149,25 @@ const SignUpPage = () => {
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
+                  {...register('email')}
                   type="email"
                   id="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  className="w-full bg-slate-700/50 border border-slate-600/50 rounded-xl py-3 pl-12 pr-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all"
+                  className={`w-full bg-slate-700/50 border rounded-xl py-3 pl-12 pr-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all ${
+                    errors.email ? 'border-red-500/50' : 'border-slate-600/50'
+                  }`}
                   placeholder="you@example.com"
                 />
               </div>
+              {errors.email && (
+                <motion.span
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-400 text-sm mt-2 flex items-center space-x-1"
+                >
+                  <span>•</span>
+                  <span>{errors.email.message}</span>
+                </motion.span>
+              )}
             </div>
 
             {/* Password Field */}
@@ -129,11 +178,12 @@ const SignUpPage = () => {
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
+                  {...register('password')}
                   type={showPassword ? 'text' : 'password'}
                   id="password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  className="w-full bg-slate-700/50 border border-slate-600/50 rounded-xl py-3 pl-12 pr-12 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all"
+                  className={`w-full bg-slate-700/50 border rounded-xl py-3 pl-12 pr-12 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all ${
+                    errors.password ? 'border-red-500/50' : 'border-slate-600/50'
+                  }`}
                   placeholder="••••••••"
                 />
                 <button
@@ -144,18 +194,27 @@ const SignUpPage = () => {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              {errors.password && (
+                <motion.span
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-400 text-sm mt-2 flex items-center space-x-1"
+                >
+                  <span>•</span>
+                  <span>{errors.password.message}</span>
+                </motion.span>
+              )}
             </div>
 
             {/* Submit Button */}
             <motion.button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isLoading}
+              type="submit"
+              disabled={isSubmitting}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="w-full bg-gradient-to-r from-violet-500 via-purple-500 to-blue-500 text-white py-3.5 rounded-xl font-semibold flex items-center justify-center space-x-2 shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? (
+              {isSubmitting ? (
                 <>
                   <motion.div
                     animate={{ rotate: 360 }}
@@ -171,7 +230,7 @@ const SignUpPage = () => {
                 </>
               )}
             </motion.button>
-          </div>
+          </form>
 
           {/* Sign In Link */}
           <div className="mt-6 text-center">
@@ -195,11 +254,11 @@ const SignUpPage = () => {
           className="text-center text-slate-500 text-sm mt-6"
         >
           By signing up, you agree to our{' '}
-          <Link to="/" className="text-slate-400 hover:text-slate-300 transition-colors">
+          <Link to="" className="text-slate-400 hover:text-slate-300 transition-colors">
             Terms
           </Link>{' '}
           and{' '}
-          <Link to="/" className="text-slate-400 hover:text-slate-300 transition-colors">
+          <Link to="" className="text-slate-400 hover:text-slate-300 transition-colors">
             Privacy Policy
           </Link>
         </motion.p>
