@@ -52,7 +52,7 @@ const App = () => {
         </Route>
 
         {/* Catch-all redirect (optional) */}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
   );
