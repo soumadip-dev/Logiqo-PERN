@@ -1,41 +1,69 @@
 import { create } from 'zustand';
 import axiosInstance from '../lib/axiosInstance';
+import toast from 'react-hot-toast';
 
-const useAuthStore = create(set => ({
+export const useAuthStore = create(set => ({
   authUser: null,
-  isSigningUp: false,
+  isSigninUp: false,
   isLoggingIn: false,
   isCheckingAuth: false,
 
-  // Actions to check authentication
   checkAuth: async () => {
     set({ isCheckingAuth: true });
     try {
-      const response = await axiosInstance.get('/auth/check');
-      console.log('checkAuth response:', response);
+      const res = await axiosInstance.get('/auth/check');
+      console.log('checkauth response', res.data);
 
-      set({ authUser: response.data.user });
+      set({ authUser: res.data.user });
     } catch (error) {
-      console.error('Error checking authentication:', error);
+      console.log('❌ Error checking auth:', error);
       set({ authUser: null });
     } finally {
       set({ isCheckingAuth: false });
     }
   },
 
-  // Actions to handle sign up
-  signUp: async data => {
-    set({ isSigningUp: true });
+  signup: async data => {
+    set({ isSigninUp: true });
     try {
-      const response = await axiosInstance.post('/auth/register', data);
-      console.log('Sign up response:', response);
-      set({ authUser: response.data.user });
+      const res = await axiosInstance.post('/auth/register', data);
+
+      set({ authUser: res.data.user });
+
+      toast.success(res.data.message);
     } catch (error) {
-      console.error('Error signing up:', error);
+      console.log('Error signing up', error);
+      toast.error('Error signing up');
     } finally {
-      set({ isSigningUp: false });
+      set({ isSigninUp: false });
+    }
+  },
+
+  login: async data => {
+    set({ isLoggingIn: true });
+    try {
+      const res = await axiosInstance.post('/auth/login', data);
+
+      set({ authUser: res.data.user });
+
+      toast.success(res.data.message);
+    } catch (error) {
+      console.log('Error logging in', error);
+      toast.error('Error logging in');
+    } finally {
+      set({ isLoggingIn: false });
+    }
+  },
+
+  logout: async () => {
+    try {
+      await axiosInstance.post('/auth/logout');
+      set({ authUser: null });
+
+      toast.success('Logout successful');
+    } catch (error) {
+      console.log('Error logging out', error);
+      toast.error('Error logging out');
     }
   },
 }));
-
-export default useAuthStore;
