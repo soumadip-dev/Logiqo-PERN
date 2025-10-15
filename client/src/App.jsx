@@ -3,9 +3,14 @@ import { Toaster } from 'react-hot-toast';
 import { useEffect } from 'react';
 import { Loader } from 'lucide-react';
 
+import LandingPage from './pages/LandingPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
+import AddProblem from './pages/AddProblem';
+import ProblemPage from './pages/ProblemPage';
+import Layout from './Layout/Layout';
+import AdminRoute from './components/AdminRoute';
 import NotFoundPage from './pages/NotFoundPage';
 import { useAuthStore } from './store/useAuthStore';
 
@@ -28,10 +33,26 @@ const App = () => {
     <div className="flex flex-col justify-start">
       <Toaster />
       <Routes>
-        <Route path="/" element={authUser ? <HomePage /> : <Navigate to={'/login'} />} />
-        <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
-        <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
-        <Route path="*" element={<NotFoundPage />} />
+        {/* Public Landing Page */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* Auth Routes */}
+        <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/app" />} />
+        <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/app" />} />
+
+        {/* Protected Routes under /app */}
+        <Route path="/app" element={authUser ? <Layout /> : <Navigate to="/login" />}>
+          <Route index element={<HomePage />} />
+          <Route path="problem/:id" element={<ProblemPage />} />
+
+          {/* Admin Only Route */}
+          <Route element={<AdminRoute />}>
+            <Route path="add-problem" element={<AddProblem />} />
+          </Route>
+        </Route>
+
+        {/* Catch-all redirect (optional) */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
   );
