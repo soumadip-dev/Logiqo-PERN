@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight, Eye, EyeOff, Sparkles, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import useAuthStore from '../store/useAuthStore';
 
 // Zod validation schema
 const signUpSchema = z.object({
@@ -30,6 +31,20 @@ const signUpSchema = z.object({
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
+  const { signUp, isSigningUp, authUser } = useAuthStore();
+
+  useEffect(() => {
+    console.log('authUser changed:', authUser);
+    if (authUser) {
+      console.log('✅ User successfully stored in authUser:', authUser);
+      console.log('User ID:', authUser.id);
+      console.log('User Name:', authUser.name);
+      console.log('User Email:', authUser.email);
+      console.log('User Role:', authUser.role);
+      console.log('User Image:', authUser.image);
+    }
+  }, [authUser]);
+
   const {
     register,
     handleSubmit,
@@ -40,11 +55,14 @@ const SignUpPage = () => {
   });
 
   const onSubmit = async data => {
-    console.log('Form data:', data);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    // Handle successful signup
-    // window.location.href = '/home';
+    try {
+      console.log('Form data:', data);
+      // Use the signUp function from the store
+      await signUp(data);
+      console.log(authUser);
+    } catch (error) {
+      console.error('Error signing up:', error);
+    }
   };
 
   return (

@@ -1,9 +1,17 @@
-import React from 'react'
+import React from 'react';
+import useAuthStore from '../store/useAuthStore';
 
 const HomePage = () => {
+  const { authUser } = useAuthStore();
   return (
-    <div>HomePage</div>
-  )
-}
+    <div>
+      {authUser && (
+        <div>
+          <h1>Welcome {authUser.name}</h1>
+        </div>
+      )}
+    </div>
+  );
+};
 
-export default HomePage
+export default HomePage;

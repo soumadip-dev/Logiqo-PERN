@@ -9,4 +9,11 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+// Log final URL before sending
+axiosInstance.interceptors.request.use(config => {
+  const finalUrl = `${config.baseURL?.replace(/\/$/, '')}${config.url}`;
+  console.log('Final request URL:', finalUrl);
+  return config;
+});
+
 export default axiosInstance;

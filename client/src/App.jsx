@@ -4,9 +4,24 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import LandingPage from './pages/LandingPage';
 import NotFoundPage from './pages/NotFoundPage';
+import useAuthStore from './store/useAuthStore';
+import { useEffect } from 'react';
+import { Loader } from 'lucide-react';
 
 const App = () => {
-  const authUser = false; // Replace with your actual authentication state
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  if (isCheckingAuth) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-slate-950 text-white">
+        <Loader className="w-10 h-10 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col justify-start">
