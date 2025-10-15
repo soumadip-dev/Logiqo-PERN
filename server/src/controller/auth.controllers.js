@@ -11,14 +11,13 @@ async function registerUser(req, res) {
     const { createdUser, authToken } = await registerService(name, email, password);
 
     // Set JWT token in HTTP-only cookie
-    const cookieOptions = {
-      httpOnly: true, // can't access from JS
-      secure: false, // works over HTTP
-      sameSite: 'none', // allow cross-site requests
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    res.cookie('authToken', authToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       path: '/',
-    };
-    res.cookie('authToken', authToken, cookieOptions);
+    });
 
     // Send successful response
     res.status(201).json({
@@ -47,14 +46,13 @@ async function loginUser(req, res) {
   try {
     const { existingUser, authToken } = await loginService(email, password);
 
-    const cookieOptions = {
+    res.cookie('authToken', authToken, {
       httpOnly: true,
-      sameSite: ENV.NODE_ENV === 'production' ? 'none' : 'strict',
-      secure: ENV.NODE_ENV === 'production',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       path: '/',
-    };
-    res.cookie('authToken', authToken, cookieOptions);
+    });
 
     res.status(200).json({
       success: true,
