@@ -86,7 +86,11 @@ const Navbar = () => {
                   {/* Profile Link */}
                   <Link
                     to="/app/profile"
-                    onClick={() => setIsDropdownOpen(false)}
+                    onClick={e => {
+                      e.preventDefault(); // block navigation
+                      setIsDropdownOpen(false);
+                    }}
+                    // onClick={() => setIsDropdownOpen(false)}
                     className="flex items-center space-x-3 px-4 py-3 text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors duration-200"
                   >
                     <User className="w-4 h-4 text-violet-400" />
