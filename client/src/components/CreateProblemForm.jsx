@@ -297,191 +297,102 @@ class Main {
 
 // Sample problem data for another type of question
 const sampleStringProblem = {
-  title: 'Valid Palindrome',
+  title: 'Check Palindrome String',
   description:
-    'A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers. Given a string s, return true if it is a palindrome, or false otherwise.',
+    'Given a string s, return true if s is a palindrome, otherwise return false. A palindrome is a string that reads the same backward as forward. Note: Ignore case and non-alphanumeric characters.',
   difficulty: 'EASY',
-  tags: ['String', 'Two Pointers'],
-  constraints: '1 <= s.length <= 2 * 10^5\ns consists only of printable ASCII characters.',
+  tags: ['String', 'Two Pointers', 'Palindrome'],
+  constraints: '1 <= s.length <= 10^5',
   hints:
-    'Consider using two pointers, one from the start and one from the end, moving towards the center.',
+    'Normalize the string by removing non-alphanumeric characters and converting to lowercase before checking. Compare from both ends or use string reversal.',
   editorial:
-    'We can use two pointers approach to check if the string is a palindrome. One pointer starts from the beginning and the other from the end, moving towards each other.',
+    '## Solution Approach\n\n### Algorithm\n1. Remove all non-alphanumeric characters and convert to lowercase.\n2. Compare the cleaned string with its reverse.\n3. If they match, it is a palindrome.\n\n### Alternative Approach\n- Use two pointers, one at the start and one at the end.\n- Move inward while characters match.\n- Skip non-alphanumeric characters.\n\n### Time Complexity\n- O(n) for scanning and comparison.\n\n### Space Complexity\n- O(n) for the cleaned string or O(1) for two-pointer method.',
   testcases: [
-    {
-      input: 'A man, a plan, a canal: Panama',
-      output: 'true',
-    },
-    {
-      input: 'race a car',
-      output: 'false',
-    },
-    {
-      input: ' ',
-      output: 'true',
-    },
+    { input: 'madam', output: 'true' },
+    { input: 'hello', output: 'false' },
+    { input: 'A man, a plan, a canal: Panama', output: 'true' },
+    { input: 'No lemon, no melon', output: 'true' },
+    { input: 'Was it a car or a cat I saw?', output: 'true' },
+    { input: 'Palindrome', output: 'false' },
+    { input: ' ', output: 'true' },
+    { input: 'a', output: 'true' },
+    { input: '0P', output: 'false' },
+    { input: 'Able , was I, I saw elba', output: 'true' },
   ],
   examples: {
-    JAVASCRIPT: {
-      input: 's = "A man, a plan, a canal: Panama"',
-      output: 'true',
-      explanation: '"amanaplanacanalpanama" is a palindrome.',
-    },
     PYTHON: {
-      input: 's = "A man, a plan, a canal: Panama"',
+      input: 'A man, a plan, a canal: Panama',
       output: 'true',
-      explanation: '"amanaplanacanalpanama" is a palindrome.',
+      explanation:
+        "After ignoring non-alphanumeric characters and case, the string becomes 'amanaplanacanalpanama', which is a palindrome.",
+    },
+    JAVASCRIPT: {
+      input: 'race a car',
+      output: 'false',
+      explanation: "After cleaning, the string becomes 'raceacar', which is not a palindrome.",
     },
     JAVA: {
-      input: 's = "A man, a plan, a canal: Panama"',
+      input: 'No lemon, no melon',
       output: 'true',
-      explanation: '"amanaplanacanalpanama" is a palindrome.',
+      explanation:
+        'After removing spaces and punctuation, the string reads the same backward and forward.',
     },
   },
   codeSnippets: {
-    JAVASCRIPT: `/**
-   * @param {string} s
-   * @return {boolean}
-   */
-  function isPalindrome(s) {
+    JAVASCRIPT: `const fs = require('fs');
+
+function isPalindrome(s) {
     // Write your code here
-  }
-  
-  // Add readline for dynamic input handling
-  const readline = require('readline');
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    terminal: false
-  });
-  
-  // Process input line
-  rl.on('line', (line) => {
-    // Call solution with the input string
-    const result = isPalindrome(line);
-    
-    // Output the result
-    console.log(result ? "true" : "false");
-    rl.close();
-  });`,
-    PYTHON: `class Solution:
-      def isPalindrome(self, s: str) -> bool:
-          # Write your code here
-          pass
-  
-  # Input parsing
-  if __name__ == "__main__":
-      import sys
-      # Read the input string
-      s = sys.stdin.readline().strip()
-      
-      # Call solution
-      sol = Solution()
-      result = sol.isPalindrome(s)
-      
-      # Output result
-      print(str(result).lower())  # Convert True/False to lowercase true/false`,
-    JAVA: `import java.util.Scanner;
+    // Return true if s is palindrome, false otherwise
+}
+
+const input = fs.readFileSync(0, 'utf-8').trim();
+console.log(isPalindrome(input));`,
+    PYTHON: `def is_palindrome(s):
+    # Write your code here
+    # Return True if s is palindrome, False otherwise
+    pass
+
+import sys
+input_line = sys.stdin.read().strip()
+print('true' if is_palindrome(input_line) else 'false')`,
+    JAVA: `import java.util.*;
+
 public class Main {
-    public static String preprocess(String s) {
-        return s.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
-    }
     public static boolean isPalindrome(String s) {
-       
+        // Write your code here
+        // Return true if s is palindrome, false otherwise
     }
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-        boolean result = isPalindrome(input);
-        System.out.println(result ? "true" : "false");
+        String s = sc.nextLine();
+        System.out.println(isPalindrome(s));
     }
-}
-`,
+}`,
   },
   referenceSolutions: {
-    JAVASCRIPT: `/**
-   * @param {string} s
-   * @return {boolean}
-   */
-  function isPalindrome(s) {
-    // Convert to lowercase and remove non-alphanumeric characters
-    s = s.toLowerCase().replace(/[^a-z0-9]/g, '');
-    
-    // Check if it's a palindrome
-    let left = 0;
-    let right = s.length - 1;
-    
-    while (left < right) {
-      if (s[left] !== s[right]) {
-        return false;
-      }
-      left++;
-      right--;
-    }
-    
-    return true;
-  }
-  
-  // Add readline for dynamic input handling
-  const readline = require('readline');
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    terminal: false
-  });
-  
-  // Process input line
-  rl.on('line', (line) => {
-    // Call solution with the input string
-    const result = isPalindrome(line);
-    
-    // Output the result
-    console.log(result ? "true" : "false");
-    rl.close();
-  });`,
-    PYTHON: `class Solution:
-      def isPalindrome(self, s: str) -> bool:
-          # Convert to lowercase and keep only alphanumeric characters
-          filtered_chars = [c.lower() for c in s if c.isalnum()]
-          
-          # Check if it's a palindrome
-          return filtered_chars == filtered_chars[::-1]
-  
-  # Input parsing
-  if __name__ == "__main__":
-      import sys
-      # Read the input string
-      s = sys.stdin.readline().strip()
-      
-      # Call solution
-      sol = Solution()
-      result = sol.isPalindrome(s)
-      
-      # Output result
-      print(str(result).lower())  # Convert True/False to lowercase true/false`,
-    JAVA: `import java.util.Scanner;
+    JAVASCRIPT: `const fs = require('fs');
+const input = fs.readFileSync(0, 'utf-8').trim();
+
+const clean = input.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+const reversed = clean.split('').reverse().join('');
+console.log(clean === reversed ? 'true' : 'false');`,
+    PYTHON: `import sys, re
+s = sys.stdin.read().strip()
+clean = re.sub(r'[^A-Za-z0-9]', '', s).lower()
+print('true' if clean == clean[::-1] else 'false')`,
+    JAVA: `import java.util.*;
+
 public class Main {
-    public static String preprocess(String s) {
-        return s.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
-    }
-    public static boolean isPalindrome(String s) {
-        s = preprocess(s);
-        int left = 0, right = s.length() - 1;
-        while (left < right) {
-            if (s.charAt(left) != s.charAt(right)) return false;
-            left++;
-            right--;
-        }
-        return true;
-    }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-        boolean result = isPalindrome(input);
-        System.out.println(result ? "true" : "false");
+        String s = sc.nextLine();
+        s = s.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+        String rev = new StringBuilder(s).reverse().toString();
+        System.out.println(s.equals(rev));
     }
-}
-`,
+}`,
   },
 };
 
@@ -541,7 +452,16 @@ const CreateProblemForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async value => {
-    console.log(value);
+    try {
+      setIsLoading(true);
+      const res = await axiosInstance.post('/problems/create-problem', value);
+      toast.success(res.data.message);
+      navigate('/app');
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const loadSampleData = () => {
@@ -552,8 +472,9 @@ const CreateProblemForm = () => {
     reset(sampleData);
   };
 
+  // Go back to previous page
   const goBack = () => {
-    navigate(-1); // Go back to previous page
+    navigate(-1);
   };
 
   return (
