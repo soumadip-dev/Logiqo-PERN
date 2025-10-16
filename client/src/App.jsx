@@ -9,8 +9,7 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import AddProblem from './pages/AddProblem';
 import ProblemPage from './pages/ProblemPage';
-import Layout from './Layout/Layout';
-import AdminRoute from './components/AdminRoute';
+// import Layout from './Layout/Layout';
 import NotFoundPage from './pages/NotFoundPage';
 import { useAuthStore } from './store/useAuthStore';
 
@@ -41,17 +40,16 @@ const App = () => {
         <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/app" />} />
 
         {/* Protected Routes under /app */}
-        <Route path="/app" element={authUser ? <Layout /> : <Navigate to="/login" />}>
+        <Route path="/app" element={!authUser && <Navigate to="/login" />}>
           <Route index element={<HomePage />} />
-          <Route path="problem/:id" element={<ProblemPage />} />
-
-          {/* Admin Only Route */}
-          <Route element={<AdminRoute />}>
-            <Route path="add-problem" element={<AddProblem />} />
-          </Route>
+          <Route path="problem/id" element={<ProblemPage />} />
+          <Route
+            path="add-problem"
+            element={authUser?.role === 'ADMIN' ? <AddProblem /> : <Navigate to="/app" />}
+          />
         </Route>
 
-        {/* Catch-all redirect (optional) */}
+        {/* Catch-all redirect */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
