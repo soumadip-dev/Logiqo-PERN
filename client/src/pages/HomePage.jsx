@@ -1,6 +1,22 @@
+import { useEffect } from 'react';
 import Navbar from '../components/Navbar';
+import { useProblemStore } from '../store/useProblemStore';
+import { Loader } from 'lucide-react';
 
 const HomePage = () => {
+  const { allProblems: problems, isLoadingAllProblems, fetchAllProblems } = useProblemStore();
+
+  useEffect(() => {
+    fetchAllProblems();
+  }, [fetchAllProblems]);
+
+  if (isLoadingAllProblems) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader className="size-10 animate-spin" />
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden relative">
       {/* Animated Background Grid */}
@@ -24,19 +40,30 @@ const HomePage = () => {
       <div className="relative z-10 pt-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 text-amber-50">
+            <h1 className="text-4xl font-extrabold z-10 text-center text-amber-50">
               Welcome to{' '}
               <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
                 Logiqo
               </span>
             </h1>
-            <p className="text-xl sm:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="mt-4 text-center text-lg font-semibold text-gray-500 dark:text-gray-400 z-10">
               <span className="bg-gradient-to-r from-violet-300 to-purple-300 bg-clip-text text-transparent font-semibold">
                 Logiqo
-              </span>{' '}
+              </span>
               is a platform for sharing and solving coding problems. Join our community of
               developers and enhance your problem-solving skills.
             </p>
+            {problems && problems.length > 0 ? (
+              problems.map(problem => (
+                <h1 key={problem.id} className="text-lg font-semibold text-red-500">
+                  {problem.title}
+                </h1>
+              ))
+            ) : (
+              <p className="mt-10 text-center text-lg font-semibold text-gray-500 dark:text-gray-400 z-10 border border-primary px-4 py-2 rounded-md border-dashed">
+                No problems found
+              </p>
+            )}
           </div>
         </div>
       </div>

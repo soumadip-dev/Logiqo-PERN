@@ -17,6 +17,7 @@ import { useState } from 'react';
 import axiosInstance from '../lib/axiosInstance';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { useProblemStore } from '../store/useProblemStore';
 
 const problemSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters'),
@@ -399,6 +400,7 @@ public class Main {
 const CreateProblemForm = () => {
   const [sampleType, setSampleType] = useState('DP');
   const navigate = useNavigate();
+  const { isProblemCreating, createProblem } = useProblemStore();
 
   const {
     register,
@@ -449,18 +451,13 @@ const CreateProblemForm = () => {
     name: 'tags',
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const onSubmit = async value => {
     try {
-      setIsLoading(true);
-      const res = await axiosInstance.post('/problems/create-problem', value);
-      toast.success(res.data.message);
+      await createProblem(value);
+
       navigate('/app');
     } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      setIsLoading(false);
+      toast.error(error?.response?.data?.message || 'Failed to create problem');
     }
   };
 
@@ -931,7 +928,7 @@ const CreateProblemForm = () => {
                 type="submit"
                 className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-4 rounded-xl text-lg hover:shadow-2xl flex items-center gap-3 transition-all duration-200 hover:scale-105"
               >
-                {isLoading ? (
+                {isProblemCreating ? (
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                 ) : (
                   <>
