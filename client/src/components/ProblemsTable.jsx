@@ -37,7 +37,7 @@ const ProblemsTable = ({ problems }) => {
     return Array.from(tagsSet);
   }, [problems]);
 
-  // Filter problems based on search text, difficulty, and selected tag - CORRECTED
+  // Filter problems based on search text, difficulty, and selected tag
   const filteredProblems = useMemo(() => {
     // Check if 'problems' is an array. If 'problems' is undefined or null, use an empty array instead
     const problemsArray = Array.isArray(problems) ? problems : [];
@@ -129,9 +129,11 @@ const ProblemsTable = ({ problems }) => {
           onChange={handleDifficultyChange}
           className="px-4 py-2.5 bg-white/5 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all duration-200 cursor-pointer"
         >
-          <option value="ALL">All Difficulties</option>
+          <option value="ALL" className="bg-gray-800 text-white">
+            All Difficulties
+          </option>
           {difficulties.map(diff => (
-            <option key={diff} value={diff}>
+            <option key={diff} value={diff} className="bg-gray-800 text-white">
               {diff.charAt(0).toUpperCase() + diff.slice(1).toLowerCase()}
             </option>
           ))}
@@ -141,9 +143,11 @@ const ProblemsTable = ({ problems }) => {
           onChange={handleTagChange}
           className="px-4 py-2.5 bg-white/5 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all duration-200 cursor-pointer"
         >
-          <option value="ALL">All Tags</option>
+          <option value="ALL" className="bg-gray-800 text-white">
+            All Tags
+          </option>
           {allTags.map(tag => (
-            <option key={tag} value={tag}>
+            <option key={tag} value={tag} className="bg-gray-800 text-white">
               {tag}
             </option>
           ))}
@@ -236,7 +240,7 @@ const ProblemsTable = ({ problems }) => {
                           )}
                           <button className="flex items-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-gray-300 hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 group/btn">
                             <Bookmark className="size-4 transition-transform group-hover/btn:scale-110" />
-                            <span className="text-sm font-medium">Save</span>
+                            <span className="text-sm font-medium">Save to Playlist</span>
                           </button>
                         </div>
                       </td>
