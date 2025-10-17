@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import { useState } from 'react';
-import axiosInstance from '../lib/axiosInstance';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useProblemStore } from '../store/useProblemStore';
@@ -927,6 +926,7 @@ const CreateProblemForm = () => {
               <button
                 type="submit"
                 className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-4 rounded-xl text-lg hover:shadow-2xl flex items-center gap-3 transition-all duration-200 hover:scale-105"
+                disabled={isProblemCreating}
               >
                 {isProblemCreating ? (
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
