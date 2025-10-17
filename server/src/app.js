@@ -16,7 +16,8 @@ const app = express();
 // CORS middleware
 app.use(
   cors({
-    origin: '*', // Allow all origins
+    origin: ENV.FRONTEND_URL,
+    credentials: true, // If true, allows cookies to be included in cross-site requests
   })
 );
 
