@@ -1,1 +1,78 @@
 @import 'tailwindcss';
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.5) rgba(30, 41, 59, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 4px;
+  margin: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.7), rgba(139, 92, 246, 0.7));
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.9), rgba(139, 92, 246, 0.9));
+  transform: scale(1.1);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, rgb(99, 102, 241), rgb(139, 92, 246));
+}
+
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.5) rgba(30, 41, 59, 0.3);
+}
+
+/* Smooth scrolling */
+.custom-scrollbar {
+  scroll-behavior: smooth;
+}
+
+/* Specific styling for different scrollbar types */
+.horizontal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.5) rgba(30, 41, 59, 0.3);
+}
+
+.horizontal-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.horizontal-scrollbar::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 3px;
+}
+
+.horizontal-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.7), rgba(139, 92, 246, 0.7));
+  border-radius: 3px;
+}
+
+/* Editor specific scrollbar */
+.monaco-scrollable-element .scrollbar {
+  background: rgba(30, 41, 59, 0.3) !important;
+}
+
+.monaco-scrollable-element .slider {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.7), rgba(139, 92, 246, 0.7)) !important;
+  border-radius: 4px !important;
+}
