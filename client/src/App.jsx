@@ -42,7 +42,10 @@ const App = () => {
         {/* Protected Routes under /app */}
         <Route path="/app" element={!authUser && <Navigate to="/login" />}>
           <Route index element={<HomePage />} />
-          <Route path="problem/id" element={<ProblemPage />} />
+          <Route
+            path="problem/:id"
+            element={authUser ? <ProblemPage /> : <Navigate to="/login" />}
+          />
           <Route
             path="add-problem"
             element={authUser?.role === 'ADMIN' ? <AddProblem /> : <Navigate to="/app" />}
