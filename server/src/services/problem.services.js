@@ -79,20 +79,15 @@ async function createProblemService(data) {
 }
 
 //* Service for getting all problems
-async function getAllProblemsService() {
+async function getAllProblemsService(id) {
   // Get all problems from the database
-  const problems = await db.Problem.findMany({
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      difficulty: true,
-      tags: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
+  const problems = await db.problem.findMany({
+    include: {
+      solvedBy: {
+        where: {
+          userId: id,
+        },
+      },
     },
   });
 

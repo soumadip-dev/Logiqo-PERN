@@ -81,7 +81,7 @@ async function createProblem(req, res) {
 async function getAllProblems(req, res) {
   try {
     // Call service to fetch all problems
-    const problems = await getAllProblemsService();
+    const problems = await getAllProblemsService(req.user?.id);
 
     // Send successful response
     res.status(200).json({
