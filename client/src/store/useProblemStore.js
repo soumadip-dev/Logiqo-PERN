@@ -44,8 +44,9 @@ export const useProblemStore = create(set => ({
     set({ isLoadingSpecificProblem: true });
     try {
       const response = await axiosInstance.get(`/problems/get-problem/${problemId}`);
+      console.log(response.data.problem);
+      
       set({ specificProblem: response.data.problem });
-      toast.success(response.data.message || 'Problem fetched successfully');
     } catch (error) {
       console.error(error.message);
       toast.error('Failed to fetch problem');
