@@ -70,8 +70,7 @@ const SubmissionsList = ({ submissions, isLoading }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            whileHover={{ scale: 1.02 }}
-            className="bg-slate-800/50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-700/50 backdrop-blur-sm p-6"
+            className="bg-slate-800/50 rounded-2xl shadow-lg transition-all duration-300 border border-slate-700/50 backdrop-blur-sm p-6"
           >
             <div className="p-0">
               <div className="flex items-center justify-between">
@@ -103,20 +102,20 @@ const SubmissionsList = ({ submissions, isLoading }) => {
 
                 {/* Right Section: Runtime, Memory, and Date */}
                 <div className="flex items-center gap-6 text-slate-400">
-                  <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4" />
                     <span className="text-slate-300 font-medium">{avgTime.toFixed(3)} s</span>
-                  </motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-2">
+                  </div>
+                  <div className="flex items-center gap-2">
                     <Memory className="w-4 h-4" />
                     <span className="text-slate-300 font-medium">{avgMemory.toFixed(0)} KB</span>
-                  </motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-2">
+                  </div>
+                  <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
                     <span className="text-slate-300 font-medium">
                       {new Date(submission.createdAt).toLocaleDateString()}
                     </span>
-                  </motion.div>
+                  </div>
                 </div>
               </div>
             </div>

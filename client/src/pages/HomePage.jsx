@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import { useProblemStore } from '../store/useProblemStore';
@@ -7,10 +7,16 @@ import ProblemsTable from '../components/ProblemsTable';
 
 const HomePage = () => {
   const { allProblems: problems, isLoadingAllProblems, fetchAllProblems } = useProblemStore();
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  // Function to refresh problems list
+  const refreshProblems = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
 
   useEffect(() => {
     fetchAllProblems();
-  }, [fetchAllProblems]);
+  }, [fetchAllProblems, refreshTrigger]); // Add refreshTrigger as dependency
 
   if (isLoadingAllProblems) {
     return (
@@ -114,7 +120,7 @@ const HomePage = () => {
               transition={{ duration: 0.6, delay: 0.4 }}
             >
               {problems && problems.length > 0 ? (
-                <ProblemsTable problems={problems} />
+                <ProblemsTable problems={problems} onProblemDeleted={refreshProblems} />
               ) : (
                 <motion.p
                   whileHover={{ scale: 1.02 }}

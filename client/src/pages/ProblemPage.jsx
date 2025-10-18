@@ -502,7 +502,7 @@ const ProblemPage = () => {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 to="/app"
-                className="p-2 hover:bg-slate-700/50 rounded-xl transition-all duration-200 flex items-center gap-2 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600"
+                className="p-2 hover:bg-slate-700/50 rounded-xl transition-all duration-200 flex items-center gap-2 text-slate-300 hover:text-white  hover:border-slate-600"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Link>

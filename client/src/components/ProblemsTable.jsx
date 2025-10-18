@@ -2,9 +2,11 @@ import { Bookmark, PencilIcon, Plus, TrashIcon } from 'lucide-react';
 import { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
+import { useActionStore } from '../store/useAction';
 
-const ProblemsTable = ({ problems }) => {
+const ProblemsTable = ({ problems, onProblemDeleted }) => {
   const { authUser } = useAuthStore();
+  const { isDeletingProblem, deleteProblem } = useActionStore();
 
   const [search, setSearch] = useState('');
   const [difficulty, setDifficulty] = useState('ALL');
@@ -81,6 +83,24 @@ const ProblemsTable = ({ problems }) => {
 
   const handleSearchChange = e => {
     setSearch(e.target.value);
+  };
+
+  // Handle delete problem
+  const handleDeleteProblem = async problemId => {
+    if (
+      window.confirm('Are you sure you want to delete this problem? This action cannot be undone.')
+    ) {
+      try {
+        await deleteProblem(problemId);
+        // Call the parent component's refresh function
+        if (onProblemDeleted) {
+          onProblemDeleted();
+        }
+      } catch (error) {
+        // Error is already handled in the store with toast notification
+        console.error('Failed to delete problem:', error);
+      }
+    }
   };
 
   return (
@@ -230,7 +250,11 @@ const ProblemsTable = ({ problems }) => {
                         <div className="flex items-center gap-2">
                           {authUser?.role === 'ADMIN' && (
                             <div className="flex items-center gap-1 mr-2">
-                              <button className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/20 rounded-xl transition-all duration-200 hover:scale-110 active:scale-95">
+                              <button
+                                onClick={() => handleDeleteProblem(problem.id)}
+                                disabled={isDeletingProblem}
+                                className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/20 rounded-xl transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
                                 <TrashIcon className="size-4" />
                               </button>
                               <button className="p-2 text-gray-400 hover:text-gray-300 hover:bg-white/10 rounded-xl transition-all duration-200 hover:scale-110 active:scale-95">
