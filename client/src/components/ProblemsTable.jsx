@@ -2,7 +2,7 @@ import { Bookmark, PencilIcon, Plus, TrashIcon } from 'lucide-react';
 import { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
-import { useActionStore } from '../store/useAction';
+import { useActionStore } from '../store/useActionStore';
 
 const ProblemsTable = ({ problems, onProblemDeleted }) => {
   const { authUser } = useAuthStore();
@@ -256,9 +256,6 @@ const ProblemsTable = ({ problems, onProblemDeleted }) => {
                                 className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/20 rounded-xl transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 <TrashIcon className="size-4" />
-                              </button>
-                              <button className="p-2 text-gray-400 hover:text-gray-300 hover:bg-white/10 rounded-xl transition-all duration-200 hover:scale-110 active:scale-95">
-                                <PencilIcon className="size-4" />
                               </button>
                             </div>
                           )}
