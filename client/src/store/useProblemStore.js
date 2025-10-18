@@ -43,9 +43,7 @@ export const useProblemStore = create(set => ({
   fetchProblemById: async problemId => {
     set({ isLoadingSpecificProblem: true });
     try {
-      const response = await axiosInstance.get(`/problems/get-problem/${problemId}`);
-      console.log(response.data.problem);
-      
+      const response = await axiosInstance.get(`/problems/get-problem/${problemId}`);      
       set({ specificProblem: response.data.problem });
     } catch (error) {
       console.error(error.message);

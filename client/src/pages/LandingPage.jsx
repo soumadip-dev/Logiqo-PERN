@@ -29,8 +29,6 @@ const LandingPage = () => {
 
   const navigate = useNavigate();
 
-  console.log(authUser && authUser.image);
-
   const handleGetStarted = () => {
     if (isAuthenticated) {
       navigate('/home');
