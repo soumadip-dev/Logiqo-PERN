@@ -34,12 +34,15 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo Section */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden ">
+            <Link
+              to="/"
+              className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden "
+            >
               <img src="/logo.png" alt="Logo" className="w-8 h-8 object-contain" />
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent group-hover:from-violet-300 group-hover:to-purple-300 transition-all duration-300">
+            </Link>
+            <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent group-hover:from-violet-300 group-hover:to-purple-300 transition-all duration-300">
               Logiqo
-            </span>
+            </Link>
           </Link>
 
           {/* User Profile and Dropdown */}
