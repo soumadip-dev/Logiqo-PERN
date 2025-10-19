@@ -4,11 +4,14 @@ import { Link } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { useActionStore } from '../store/useActionStore';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
+import AddToPlaylistModal from './AddToPlaylistModal';
+import CreatePlaylistModal from './CreatePlaylistModal';
+import { usePlaylistStore } from '../store/usePlaylistStore';
 
 const ProblemsTable = ({ problems, onProblemDeleted }) => {
   const { authUser } = useAuthStore();
   const { isDeletingProblem, deleteProblem } = useActionStore();
-
+  const { createPlaylist } = usePlaylistStore();
   const [search, setSearch] = useState('');
   const [difficulty, setDifficulty] = useState('ALL');
   const [selectedTag, setSelectedTag] = useState('ALL');
@@ -18,6 +21,9 @@ const ProblemsTable = ({ problems, onProblemDeleted }) => {
     problemId: null,
     problemTitle: '',
   });
+  const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false);
+  const [selectedProblemId, setSelectedProblemId] = useState(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // Reset current page when filters change
   useEffect(() => {
@@ -72,6 +78,15 @@ const ProblemsTable = ({ problems, onProblemDeleted }) => {
     setSearch(e.target.value);
   };
 
+  const handleCreatePlaylist = async data => {
+    await createPlaylist(data);
+  };
+
+  const handleAddToPlaylist = problemId => {
+    setSelectedProblemId(problemId);
+    setIsAddToPlaylistModalOpen(true);
+  };
+
   // Open delete confirmation modal
   const handleOpenDeleteModal = (problemId, problemTitle) => {
     setDeleteModal({
@@ -122,8 +137,11 @@ const ProblemsTable = ({ problems, onProblemDeleted }) => {
               {filteredProblems.length} problem{filteredProblems.length !== 1 ? 's' : ''} available
             </p>
           </div>
-          <button className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white px-4 py-2.5 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-violet-500/25 hover:scale-105 active:scale-95 group">
-            <Plus className="size-5 transition-transform group-hover:scale-110" />
+          <button
+            className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white px-4 py-2.5 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-violet-500/25 active:scale-95 group"
+            onClick={() => setIsCreateModalOpen(true)}
+          >
+            <Plus className="size-5" />
             Create Playlist
           </button>
         </div>
@@ -266,8 +284,11 @@ const ProblemsTable = ({ problems, onProblemDeleted }) => {
                                 </button>
                               </div>
                             )}
-                            <button className="flex items-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-gray-300 hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 group/btn">
-                              <Bookmark className="size-4 transition-transform group-hover/btn:scale-110" />
+                            <button
+                              className="flex items-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-gray-300 hover:text-white transition-all duration-200 active:scale-95 group/btn"
+                              onClick={() => handleAddToPlaylist(problem.id)}
+                            >
+                              <Bookmark className="size-4" />
                               <span className="text-sm font-medium">Save to Playlist</span>
                             </button>
                           </div>
@@ -318,7 +339,7 @@ const ProblemsTable = ({ problems, onProblemDeleted }) => {
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-200 ${
                   currentPage === 1
                     ? 'bg-white/5 text-gray-500 cursor-not-allowed'
-                    : 'bg-white/10 text-white hover:bg-white/20 hover:scale-105 active:scale-95'
+                    : 'bg-white/10 text-white hover:bg-white/20 active:scale-95'
                 }`}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -356,7 +377,7 @@ const ProblemsTable = ({ problems, onProblemDeleted }) => {
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-200 ${
                   currentPage === totalPages
                     ? 'bg-white/5 text-gray-500 cursor-not-allowed'
-                    : 'bg-white/10 text-white hover:bg-white/20 hover:scale-105 active:scale-95'
+                    : 'bg-white/10 text-white hover:bg-white/20 active:scale-95'
                 }`}
               >
                 Next
@@ -381,6 +402,16 @@ const ProblemsTable = ({ problems, onProblemDeleted }) => {
         onConfirm={handleConfirmDelete}
         isDeleting={isDeletingProblem}
         title={`Are you sure you want to delete "${deleteModal.problemTitle}"?`}
+      />
+      <CreatePlaylistModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSubmit={handleCreatePlaylist}
+      />
+      <AddToPlaylistModal
+        isOpen={isAddToPlaylistModalOpen}
+        onClose={() => setIsAddToPlaylistModalOpen(false)}
+        problemId={selectedProblemId}
       />
     </>
   );

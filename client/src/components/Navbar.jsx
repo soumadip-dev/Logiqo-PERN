@@ -34,10 +34,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo Section */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div
-              
-              className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden "
-            >
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden ">
               <img src="/logo.png" alt="Logo" className="w-8 h-8 object-contain" />
             </div>
             <div className="text-2xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent group-hover:from-violet-300 group-hover:to-purple-300 transition-all duration-300">
@@ -89,11 +86,7 @@ const Navbar = () => {
                   {/* Profile Link */}
                   <Link
                     to="/app/profile"
-                    onClick={e => {
-                      e.preventDefault(); // block navigation
-                      setIsDropdownOpen(false);
-                    }}
-                    // onClick={() => setIsDropdownOpen(false)}
+                    onClick={() => setIsDropdownOpen(false)}
                     className="flex items-center space-x-3 px-4 py-3 text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors duration-200"
                   >
                     <User className="w-4 h-4 text-violet-400" />
