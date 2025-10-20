@@ -236,7 +236,7 @@ const ProblemsTable = ({ problems, onProblemDeleted }) => {
                         <td className="py-4">
                           <Link
                             to={`/app/problem/${problem.id}`}
-                            className="text-white hover:text-violet-300 font-medium transition-colors duration-200 group-hover:translate-x-1 inline-block"
+                            className=" pl-5 text-white hover:text-violet-300 font-medium transition-colors duration-200 inline-block w-full text-left"
                           >
                             {problem.title}
                           </Link>
