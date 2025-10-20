@@ -53,6 +53,16 @@ const ProblemPage = () => {
   const [testcases, setTestCases] = useState([]);
   const [selectedTestCaseIndex, setSelectedTestCaseIndex] = useState(0);
 
+  // Check if submission has a result (accepted or rejected)
+  const hasSubmissionResult =
+    submission &&
+    (submission.status === 'Accepted' ||
+      submission.status === 'Rejected' ||
+      submission.status === 'Wrong Answer' ||
+      submission.status === 'Time Limit Exceeded' ||
+      submission.status === 'Compilation Error' ||
+      submission.status === 'Runtime Error');
+
   // Effects
   useEffect(() => {
     getProblemById(id);
@@ -605,26 +615,29 @@ const ProblemPage = () => {
               {/* Test Cases Panel */}
               <Panel defaultSize={30} minSize={20} className="flex flex-col">
                 <div className="bg-gradient-to-b from-slate-900/90 to-slate-800/90 backdrop-blur-sm border-t border-slate-700 flex-1 flex flex-col min-h-0 overflow-hidden shadow-lg">
-                  {/* Test Case Tabs */}
-                  <div className="border-b border-slate-700 flex items-center justify-between px-4 py-2 flex-shrink-0 bg-slate-800/50">
-                    <div className="flex items-center gap-1 overflow-x-auto horizontal-scrollbar pb-1">
-                      {testcases.map((_, index) => (
-                        <motion.button
-                          key={index}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className={`px-3 py-1.5 text-xs font-medium rounded-xl transition-all duration-200 border flex-shrink-0 ${
-                            selectedTestCaseIndex === index
-                              ? 'bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg border-transparent'
-                              : 'bg-slate-800 text-slate-200 hover:bg-slate-700 border-slate-600'
-                          }`}
-                          onClick={() => setSelectedTestCaseIndex(index)}
-                        >
-                          Case {index + 1}
-                        </motion.button>
-                      ))}
+                  {/* Test Case Tabs - Only show when there's no submission result */}
+                  {!hasSubmissionResult && (
+                    <div className="border-b border-slate-700 flex items-center justify-between px-4 py-2 flex-shrink-0 bg-slate-800/50">
+                      <div className="flex items-center gap-1 overflow-x-auto horizontal-scrollbar pb-1">
+                        {testcases.map((_, index) => (
+                          <motion.button
+                            key={index}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className={`px-3 py-1.5 text-xs font-medium rounded-xl transition-all duration-200 border flex-shrink-0 ${
+                              selectedTestCaseIndex === index
+                                ? 'bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg border-transparent'
+                                : 'bg-slate-800 text-slate-200 hover:bg-slate-700 border-slate-600'
+                            }`}
+                            onClick={() => setSelectedTestCaseIndex(index)}
+                          >
+                            Case {index + 1}
+                          </motion.button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
+
                   {/* Test Case Content */}
                   <div className="flex-1 overflow-y-auto custom-scrollbar p-4 min-h-0">
                     {submission ? (
