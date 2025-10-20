@@ -12,7 +12,7 @@ import ProblemPage from './pages/ProblemPage';
 // import Layout from './Layout/Layout';
 import NotFoundPage from './pages/NotFoundPage';
 import { useAuthStore } from './store/useAuthStore';
-import Profile from './pages/Profile';
+import ProfilePage from './pages/ProfilePage';
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -51,7 +51,7 @@ const App = () => {
             path="add-problem"
             element={authUser?.role === 'ADMIN' ? <AddProblem /> : <Navigate to="/app" />}
           />
-          <Route path="profile" element={<Profile />} />
+          <Route path="profile" element={<ProfilePage />} />
         </Route>
 
         {/* Catch-all redirect */}
