@@ -15,7 +15,7 @@ const router = Router();
 
 //* Define routes
 router.post('/create-problem', authMiddleware, checkAdmin, createProblem);
-router.get('/get-all-prblems', authMiddleware, getAllProblems);
+router.get('/get-all-problems', authMiddleware, getAllProblems);
 router.get('/get-problem/:id', authMiddleware, getProblemById);
 router.put('/update-problem/:id', authMiddleware, checkAdmin, updateProblem);
 router.delete('/delete-problem/:id', authMiddleware, checkAdmin, deleteProblem);
