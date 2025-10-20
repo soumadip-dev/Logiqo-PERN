@@ -65,7 +65,7 @@ const ProblemSolvedByUser = () => {
             </p>
             <div className="flex justify-center">
               <Link
-                to="/problems"
+                to="/app"
                 className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-lg sm:rounded-xl hover:shadow-lg hover:shadow-violet-500/25 transition-all duration-200 font-medium text-sm sm:text-base"
               >
                 View Problems
