@@ -255,7 +255,7 @@ class Main {
           return n;
       }
       
-      // Dynamic programming approach
+      # Dynamic programming approach
       int[] dp = new int[n + 1];
       dp[1] = 1;
       dp[2] = 2;
@@ -398,6 +398,7 @@ public class Main {
 
 const CreateProblemForm = () => {
   const [sampleType, setSampleType] = useState('DP');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { isProblemCreating, createProblem } = useProblemStore();
 
@@ -406,7 +407,7 @@ const CreateProblemForm = () => {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting: isFormSubmitting },
   } = useForm({
     resolver: zodResolver(problemSchema),
     defaultValues: {
@@ -450,13 +451,17 @@ const CreateProblemForm = () => {
     name: 'tags',
   });
 
-  const onSubmit = async value => {
+  const onSubmit = async data => {
     try {
-      await createProblem(value);
-
+      setIsSubmitting(true);
+      await createProblem(data);
+      toast.success('Problem created successfully!');
       navigate('/app');
     } catch (error) {
+      console.error('Error creating problem:', error);
       toast.error(error?.response?.data?.message || 'Failed to create problem');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -472,6 +477,10 @@ const CreateProblemForm = () => {
   const goBack = () => {
     navigate(-1);
   };
+
+  // Determine if the button should be disabled and show loader
+  const isCreating = isSubmitting || isProblemCreating;
+  const isButtonDisabled = isCreating || isFormSubmitting;
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-7xl relative z-10">
@@ -925,11 +934,14 @@ const CreateProblemForm = () => {
             <div className="flex justify-end pt-6 border-t border-slate-600/40">
               <button
                 type="submit"
-                className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-4 rounded-xl text-lg hover:shadow-2xl flex items-center gap-3 transition-all duration-200 hover:scale-105"
-                disabled={isProblemCreating}
+                className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-4 rounded-xl text-lg hover:shadow-2xl flex items-center gap-3 transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                disabled={isButtonDisabled}
               >
-                {isProblemCreating ? (
-                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                {isCreating ? (
+                  <>
+                    <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    Creating Problem...
+                  </>
                 ) : (
                   <>
                     <CheckCircle2 className="w-5 h-5" />
