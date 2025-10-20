@@ -11,6 +11,7 @@ import {
   Filter,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Editor } from '@monaco-editor/react';
 
 const ProfileSubmission = () => {
   const { submissions, getAllSubmissions } = useSubmissionStore();
@@ -232,10 +233,21 @@ const ProfileSubmission = () => {
                             <Code size={16} className="sm:w-4 sm:h-4" />
                             Solution Code
                           </h3>
-                          <div className="bg-slate-900 rounded-lg sm:rounded-xl border border-slate-600/30 overflow-hidden">
-                            <pre className="p-3 sm:p-4 text-slate-200 overflow-x-auto text-xs sm:text-sm">
-                              <code>{submission.sourceCode || 'No code available'}</code>
-                            </pre>
+                          <div className="bg-slate-900 rounded-lg sm:rounded-xl border border-slate-600/30 overflow-hidden h-64">
+                            <Editor
+                              height="100%"
+                              language={submission.language?.toLowerCase() || 'javascript'}
+                              theme="vs-dark"
+                              value={submission.sourceCode || '// No code available'}
+                              options={{
+                                readOnly: true,
+                                minimap: { enabled: false },
+                                fontSize: 13,
+                                lineNumbers: 'on',
+                                scrollBeyondLastLine: false,
+                                automaticLayout: true,
+                              }}
+                            />
                           </div>
                         </div>
 

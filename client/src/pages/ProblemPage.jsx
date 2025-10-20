@@ -251,7 +251,6 @@ const ProblemPage = () => {
                     }}
                   />
                 </div>
-
                 {/* Code Examples */}
                 <div className="mt-6">
                   <h4 className="text-base font-semibold text-white mb-4">Solution Code</h4>
@@ -269,16 +268,26 @@ const ProblemPage = () => {
                             {lang}
                           </span>
                         </div>
-                        <div className="p-4">
-                          <pre className="text-gray-100 text-xs font-mono whitespace-pre-wrap leading-relaxed">
-                            {codeSnippet}
-                          </pre>
+                        <div className="h-64">
+                          <Editor
+                            height="100%"
+                            language={lang.toLowerCase()}
+                            theme="vs-dark"
+                            value={codeSnippet}
+                            options={{
+                              readOnly: true,
+                              minimap: { enabled: false },
+                              fontSize: 13,
+                              lineNumbers: 'on',
+                              scrollBeyondLastLine: false,
+                              automaticLayout: true,
+                            }}
+                          />
                         </div>
                       </motion.div>
                     ))}
                   </div>
                 </div>
-
                 {/* Complexity Analysis */}
                 <div className="mt-6">
                   <h4 className="text-base font-semibold text-white mb-4">Complexity Analysis</h4>
