@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
-import job from './config/cron.config.js';
+
 
 import { ENV } from './config/env.config.js';
 import authRoutes from './routes/auth.routes.js';
@@ -21,8 +21,6 @@ app.use(
   })
 );
 
-// Start cron job
-job.start();
 // Body parsing middleware
 app.use(express.json()); // If we don't use this, we won't be able to access req.body
 app.use(express.urlencoded({ extended: true }));
