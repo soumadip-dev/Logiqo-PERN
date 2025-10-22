@@ -8,11 +8,28 @@
   Logiqo is a LeetCode-inspired platform for developers to practice coding in JavaScript, Python, and Java.
 </p>
 
-<div align="center">
-  <img src="./client/public/ss.png" alt="Logiqo screenshot" width="800">
-  <img src="./client/public/ss3.png" alt="Logiqo screenshot" width="800">
-  <img src="./client/public/ss2.png" alt="Logiqo screenshot" width="800">
-</div>
+<table align="center">
+  <tr>
+    <td align="center">
+     <img src="./client/public/LandingPage.png" alt="Landing Page" width="800">
+    </td>
+    <td align="center">
+  <img src="./client/public/HomePage.png" alt="Home Page" width="800">
+    </td>
+  </tr>
+  <tr>
+     <td align="center">
+    <img src="./client/public/ProblemPage.png" alt="Problem Page" width="800">
+    </td>
+    <td>
+       <img src="./client/public/Profile.png" alt="Profile page" width="800">
+    </td>
+  </tr>
+</table>
+
+## 🌐 Live Demo
+
+[Logiqo](https://logiqo-temp.vercel.app/)
 
 ## 🌟 Features
 
